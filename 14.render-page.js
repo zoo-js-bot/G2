@@ -1,10 +1,10 @@
 exports.ids = [14];
 exports.modules = {
 
-/***/ "./node_modules/_monaco-editor@0.20.0@monaco-editor/esm/vs/basic-languages/csp/csp.js":
-/*!********************************************************************************************!*\
-  !*** ./node_modules/_monaco-editor@0.20.0@monaco-editor/esm/vs/basic-languages/csp/csp.js ***!
-  \********************************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/csp/csp.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/csp/csp.js ***!
+  \**********************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
