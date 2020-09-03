@@ -1,10 +1,10 @@
 exports.ids = [49];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/sb/sb.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/sb/sb.js ***!
-  \********************************************************************/
+/***/ "./node_modules/_monaco-editor@0.20.0@monaco-editor/esm/vs/basic-languages/sb/sb.js":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/_monaco-editor@0.20.0@monaco-editor/esm/vs/basic-languages/sb/sb.js ***!
+  \******************************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

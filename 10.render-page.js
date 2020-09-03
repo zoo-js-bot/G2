@@ -1,10 +1,10 @@
 exports.ids = [10];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/cameligo/cameligo.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/cameligo/cameligo.js ***!
-  \********************************************************************************/
+/***/ "./node_modules/_monaco-editor@0.20.0@monaco-editor/esm/vs/basic-languages/cameligo/cameligo.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/_monaco-editor@0.20.0@monaco-editor/esm/vs/basic-languages/cameligo/cameligo.js ***!
+  \******************************************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
