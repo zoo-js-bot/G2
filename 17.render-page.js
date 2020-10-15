@@ -1,10 +1,10 @@
 exports.ids = [17];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/fsharp/fsharp.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/fsharp/fsharp.js ***!
-  \****************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/dart/dart.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/dart/dart.js ***!
+  \************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,11 +16,10 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
     comments: {
         lineComment: '//',
-        blockComment: ['(*', '*)'],
+        blockComment: ['/*', '*/']
     },
     brackets: [
         ['{', '}'],
@@ -31,124 +30,269 @@ var conf = {
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
-        { open: '"', close: '"' }
+        { open: "'", close: "'", notIn: ['string', 'comment'] },
+        { open: '"', close: '"', notIn: ['string'] },
+        { open: '`', close: '`', notIn: ['string', 'comment'] },
+        { open: '/**', close: ' */', notIn: ['string'] }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
+        { open: '<', close: '>' },
+        { open: "'", close: "'" },
+        { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' }
+        { open: '`', close: '`' }
     ],
     folding: {
         markers: {
-            start: new RegExp("^\\s*//\\s*#region\\b|^\\s*\\(\\*\\s*#region(.*)\\*\\)"),
-            end: new RegExp("^\\s*//\\s*#endregion\\b|^\\s*\\(\\*\\s*#endregion\\s*\\*\\)")
+            start: /^\s*\s*#?region\b/,
+            end: /^\s*\s*#?endregion\b/
         }
     }
 };
 var language = {
-    defaultToken: '',
-    tokenPostfix: '.fs',
+    defaultToken: 'invalid',
+    tokenPostfix: '.dart',
     keywords: [
-        'abstract', 'and', 'atomic', 'as',
-        'assert', 'asr', 'base', 'begin',
-        'break', 'checked', 'component',
-        'const', 'constraint', 'constructor',
-        'continue', 'class', 'default',
-        'delegate', 'do', 'done', 'downcast',
-        'downto', 'elif', 'else', 'end',
-        'exception', 'eager', 'event', 'external',
-        'extern', 'false', 'finally', 'for',
-        'fun', 'function', 'fixed', 'functor',
-        'global', 'if', 'in', 'include', 'inherit',
-        'inline', 'interface', 'internal', 'land',
-        'lor', 'lsl', 'lsr', 'lxor', 'lazy', 'let',
-        'match', 'member', 'mod', 'module', 'mutable',
-        'namespace', 'method', 'mixin', 'new', 'not',
-        'null', 'of', 'open', 'or', 'object',
-        'override', 'private', 'parallel', 'process',
-        'protected', 'pure', 'public', 'rec', 'return',
-        'static', 'sealed', 'struct', 'sig', 'then',
-        'to', 'true', 'tailcall', 'trait',
-        'try', 'type', 'upcast', 'use',
-        'val', 'void', 'virtual', 'volatile',
-        'when', 'while', 'with', 'yield'
+        'abstract',
+        'dynamic',
+        'implements',
+        'show',
+        'as',
+        'else',
+        'import',
+        'static',
+        'assert',
+        'enum',
+        'in',
+        'super',
+        'async',
+        'export',
+        'interface',
+        'switch',
+        'await',
+        'extends',
+        'is',
+        'sync',
+        'break',
+        'external',
+        'library',
+        'this',
+        'case',
+        'factory',
+        'mixin',
+        'throw',
+        'catch',
+        'false',
+        'new',
+        'true',
+        'class',
+        'final',
+        'null',
+        'try',
+        'const',
+        'finally',
+        'on',
+        'typedef',
+        'continue',
+        'for',
+        'operator',
+        'var',
+        'covariant',
+        'Function',
+        'part',
+        'void',
+        'default',
+        'get',
+        'rethrow',
+        'while',
+        'deferred',
+        'hide',
+        'return',
+        'with',
+        'do',
+        'if',
+        'set',
+        'yield'
+    ],
+    typeKeywords: ['int', 'double', 'String', 'bool'],
+    operators: [
+        '+',
+        '-',
+        '*',
+        '/',
+        '~/',
+        '%',
+        '++',
+        '--',
+        '==',
+        '!=',
+        '>',
+        '<',
+        '>=',
+        '<=',
+        '=',
+        '-=',
+        '/=',
+        '%=',
+        '>>=',
+        '^=',
+        '+=',
+        '*=',
+        '~/=',
+        '<<=',
+        '&=',
+        '!=',
+        '||',
+        '&&',
+        '&',
+        '|',
+        '^',
+        '~',
+        '<<',
+        '>>',
+        '!',
+        '>>>',
+        '??',
+        '?',
+        ':',
+        '|='
     ],
     // we include these common regular expressions
-    symbols: /[=><!~?:&|+\-*\^%;\.,\/]+/,
+    symbols: /[=><!~?:&|+\-*\/\^%]+/,
     escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-    integersuffix: /[uU]?[yslnLI]?/,
-    floatsuffix: /[fFmM]?/,
+    digits: /\d+(_+\d+)*/,
+    octaldigits: /[0-7]+(_+[0-7]+)*/,
+    binarydigits: /[0-1]+(_+[0-1]+)*/,
+    hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
+    regexpctl: /[(){}\[\]\$\^|\-*+?\.]/,
+    regexpesc: /\\(?:[bBdDfnrstvwWn0\\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
     // The main tokenizer for our languages
     tokenizer: {
-        root: [
+        root: [[/[{}]/, 'delimiter.bracket'], { include: 'common' }],
+        common: [
             // identifiers and keywords
-            [/[a-zA-Z_]\w*/, {
+            [
+                /[a-z_$][\w$]*/,
+                {
                     cases: {
-                        '@keywords': { token: 'keyword.$0' },
+                        '@typeKeywords': 'type.identifier',
+                        '@keywords': 'keyword',
                         '@default': 'identifier'
                     }
-                }],
+                }
+            ],
+            [/(?<![a-zA-Z0-9_$])([_$]*[A-Z][a-zA-Z0-9_$]*)/, 'type.identifier'],
+            // [/[A-Z][\w\$]*/, 'identifier'],
             // whitespace
             { include: '@whitespace' },
-            // [< attributes >].
-            [/\[<.*>\]/, 'annotation'],
-            // Preprocessor directive
-            [/^#(if|else|endif)/, 'keyword'],
+            // regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
+            [
+                /\/(?=([^\\\/]|\\.)+\/([gimsuy]*)(\s*)(\.|;|,|\)|\]|\}|$))/,
+                { token: 'regexp', bracket: '@open', next: '@regexp' }
+            ],
+            // @ annotations.
+            [/@[a-zA-Z]+/, 'annotation'],
+            // variable
             // delimiters and operators
-            [/[{}()\[\]]/, '@brackets'],
+            [/[()\[\]]/, '@brackets'],
             [/[<>](?!@symbols)/, '@brackets'],
-            [/@symbols/, 'delimiter'],
+            [/!(?=([^=]|$))/, 'delimiter'],
+            [
+                /@symbols/,
+                {
+                    cases: {
+                        '@operators': 'delimiter',
+                        '@default': ''
+                    }
+                }
+            ],
             // numbers
-            [/\d*\d+[eE]([\-+]?\d+)?(@floatsuffix)/, 'number.float'],
-            [/\d*\.\d+([eE][\-+]?\d+)?(@floatsuffix)/, 'number.float'],
-            [/0x[0-9a-fA-F]+LF/, 'number.float'],
-            [/0x[0-9a-fA-F]+(@integersuffix)/, 'number.hex'],
-            [/0b[0-1]+(@integersuffix)/, 'number.bin'],
-            [/\d+(@integersuffix)/, 'number'],
+            [/(@digits)[eE]([\-+]?(@digits))?/, 'number.float'],
+            [/(@digits)\.(@digits)([eE][\-+]?(@digits))?/, 'number.float'],
+            [/0[xX](@hexdigits)n?/, 'number.hex'],
+            [/0[oO]?(@octaldigits)n?/, 'number.octal'],
+            [/0[bB](@binarydigits)n?/, 'number.binary'],
+            [/(@digits)n?/, 'number'],
             // delimiter: after number because of .\d floats
             [/[;,.]/, 'delimiter'],
             // strings
             [/"([^"\\]|\\.)*$/, 'string.invalid'],
-            [/"""/, 'string', '@string."""'],
-            [/"/, 'string', '@string."'],
-            // literal string
-            [/\@"/, { token: 'string.quote', next: '@litstring' }],
-            // characters
-            [/'[^\\']'B?/, 'string'],
-            [/(')(@escapes)(')/, ['string', 'string.escape', 'string']],
-            [/'/, 'string.invalid']
+            [/'([^'\\]|\\.)*$/, 'string.invalid'],
+            [/"/, 'string', '@string_double'],
+            [/'/, 'string', '@string_single']
+            //   [/[a-zA-Z]+/, "variable"]
         ],
         whitespace: [
             [/[ \t\r\n]+/, ''],
-            [/\(\*(?!\))/, 'comment', '@comment'],
-            [/\/\/.*$/, 'comment'],
+            [/\/\*\*(?!\/)/, 'comment.doc', '@jsdoc'],
+            [/\/\*/, 'comment', '@comment'],
+            [/\/\/\/.*$/, 'comment.doc'],
+            [/\/\/.*$/, 'comment']
         ],
         comment: [
-            [/[^*(]+/, 'comment'],
-            [/\*\)/, 'comment', '@pop'],
-            [/\*/, 'comment'],
-            [/\(\*\)/, 'comment'],
-            [/\(/, 'comment']
+            [/[^\/*]+/, 'comment'],
+            [/\*\//, 'comment', '@pop'],
+            [/[\/*]/, 'comment']
         ],
-        string: [
+        jsdoc: [
+            [/[^\/*]+/, 'comment.doc'],
+            [/\*\//, 'comment.doc', '@pop'],
+            [/[\/*]/, 'comment.doc']
+        ],
+        // We match regular expression quite precisely
+        regexp: [
+            [
+                /(\{)(\d+(?:,\d*)?)(\})/,
+                ['regexp.escape.control', 'regexp.escape.control', 'regexp.escape.control']
+            ],
+            [
+                /(\[)(\^?)(?=(?:[^\]\\\/]|\\.)+)/,
+                ['regexp.escape.control', { token: 'regexp.escape.control', next: '@regexrange' }]
+            ],
+            [/(\()(\?:|\?=|\?!)/, ['regexp.escape.control', 'regexp.escape.control']],
+            [/[()]/, 'regexp.escape.control'],
+            [/@regexpctl/, 'regexp.escape.control'],
+            [/[^\\\/]/, 'regexp'],
+            [/@regexpesc/, 'regexp.escape'],
+            [/\\\./, 'regexp.invalid'],
+            [
+                /(\/)([gimsuy]*)/,
+                [{ token: 'regexp', bracket: '@close', next: '@pop' }, 'keyword.other']
+            ]
+        ],
+        regexrange: [
+            [/-/, 'regexp.escape.control'],
+            [/\^/, 'regexp.invalid'],
+            [/@regexpesc/, 'regexp.escape'],
+            [/[^\]]/, 'regexp'],
+            [
+                /\]/,
+                {
+                    token: 'regexp.escape.control',
+                    next: '@pop',
+                    bracket: '@close'
+                }
+            ]
+        ],
+        string_double: [
+            [/[^\\"\$]+/, 'string'],
             [/[^\\"]+/, 'string'],
             [/@escapes/, 'string.escape'],
             [/\\./, 'string.escape.invalid'],
-            [/("""|"B?)/, {
-                    cases: {
-                        '$#==$S2': { token: 'string', next: '@pop' },
-                        '@default': 'string'
-                    }
-                }]
+            [/"/, 'string', '@pop'],
+            [/\$\w+/, 'identifier']
         ],
-        litstring: [
-            [/[^"]+/, 'string'],
-            [/""/, 'string.escape'],
-            [/"/, { token: 'string.quote', next: '@pop' }]
-        ],
-    },
+        string_single: [
+            [/[^\\'\$]+/, 'string'],
+            [/@escapes/, 'string.escape'],
+            [/\\./, 'string.escape.invalid'],
+            [/'/, 'string', '@pop'],
+            [/\$\w+/, 'identifier']
+        ]
+    }
 };
 
 

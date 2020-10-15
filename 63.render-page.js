@@ -1,10 +1,10 @@
 exports.ids = [63];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/yaml/yaml.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/yaml/yaml.js ***!
-  \************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/swift/swift.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/swift/swift.js ***!
+  \**************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12,9 +12,13 @@ exports.modules = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "conf", function() { return conf; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "language", function() { return language; });
+/*!---------------------------------------------------------------------------------------------
+ *  Copyright (C) David Owens II, owensd.io. All rights reserved.
+ *--------------------------------------------------------------------------------------------*/
 var conf = {
     comments: {
-        lineComment: '#'
+        lineComment: '//',
+        blockComment: ['/*', '*/']
     },
     brackets: [
         ['{', '}'],
@@ -26,176 +30,238 @@ var conf = {
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: "'", close: "'" },
+        { open: '`', close: '`' }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
-    ],
-    folding: {
-        offSide: true
-    }
+        { open: "'", close: "'" },
+        { open: '`', close: '`' }
+    ]
 };
 var language = {
-    tokenPostfix: '.yaml',
-    brackets: [
-        { token: 'delimiter.bracket', open: '{', close: '}' },
-        { token: 'delimiter.square', open: '[', close: ']' }
+    defaultToken: '',
+    tokenPostfix: '.swift',
+    // TODO(owensd): Support the full range of unicode valid identifiers.
+    identifier: /[a-zA-Z_][\w$]*/,
+    // TODO(owensd): Support the @availability macro properly.
+    attributes: [
+        '@autoclosure',
+        '@noescape',
+        '@noreturn',
+        '@NSApplicationMain',
+        '@NSCopying',
+        '@NSManaged',
+        '@objc',
+        '@UIApplicationMain',
+        '@noreturn',
+        '@availability',
+        '@IBAction',
+        '@IBDesignable',
+        '@IBInspectable',
+        '@IBOutlet'
     ],
-    keywords: ['true', 'True', 'TRUE', 'false', 'False', 'FALSE', 'null', 'Null', 'Null', '~'],
-    numberInteger: /(?:0|[+-]?[0-9]+)/,
-    numberFloat: /(?:0|[+-]?[0-9]+)(?:\.[0-9]+)?(?:e[-+][1-9][0-9]*)?/,
-    numberOctal: /0o[0-7]+/,
-    numberHex: /0x[0-9a-fA-F]+/,
-    numberInfinity: /[+-]?\.(?:inf|Inf|INF)/,
-    numberNaN: /\.(?:nan|Nan|NAN)/,
-    numberDate: /\d{4}-\d\d-\d\d([Tt ]\d\d:\d\d:\d\d(\.\d+)?(( ?[+-]\d\d?(:\d\d)?)|Z)?)?/,
-    escapes: /\\(?:[btnfr\\"']|[0-7][0-7]?|[0-3][0-7]{2})/,
+    accessmodifiers: ['public', 'private', 'internal'],
+    keywords: [
+        '__COLUMN__',
+        '__FILE__',
+        '__FUNCTION__',
+        '__LINE__',
+        'as',
+        'as!',
+        'as?',
+        'associativity',
+        'break',
+        'case',
+        'catch',
+        'class',
+        'continue',
+        'convenience',
+        'default',
+        'deinit',
+        'didSet',
+        'do',
+        'dynamic',
+        'dynamicType',
+        'else',
+        'enum',
+        'extension',
+        'fallthrough',
+        'final',
+        'for',
+        'func',
+        'get',
+        'guard',
+        'if',
+        'import',
+        'in',
+        'infix',
+        'init',
+        'inout',
+        'internal',
+        'is',
+        'lazy',
+        'left',
+        'let',
+        'mutating',
+        'nil',
+        'none',
+        'nonmutating',
+        'operator',
+        'optional',
+        'override',
+        'postfix',
+        'precedence',
+        'prefix',
+        'private',
+        'protocol',
+        'Protocol',
+        'public',
+        'repeat',
+        'required',
+        'return',
+        'right',
+        'self',
+        'Self',
+        'set',
+        'static',
+        'struct',
+        'subscript',
+        'super',
+        'switch',
+        'throw',
+        'throws',
+        'try',
+        'try!',
+        'Type',
+        'typealias',
+        'unowned',
+        'var',
+        'weak',
+        'where',
+        'while',
+        'willSet',
+        'FALSE',
+        'TRUE'
+    ],
+    symbols: /[=(){}\[\].,:;@#\_&\-<>`?!+*\\\/]/,
+    // Moved . to operatorstart so it can be a delimiter
+    operatorstart: /[\/=\-+!*%<>&|^~?\u00A1-\u00A7\u00A9\u00AB\u00AC\u00AE\u00B0-\u00B1\u00B6\u00BB\u00BF\u00D7\u00F7\u2016-\u2017\u2020-\u2027\u2030-\u203E\u2041-\u2053\u2055-\u205E\u2190-\u23FF\u2500-\u2775\u2794-\u2BFF\u2E00-\u2E7F\u3001-\u3003\u3008-\u3030]/,
+    operatorend: /[\u0300-\u036F\u1DC0-\u1DFF\u20D0-\u20FF\uFE00-\uFE0F\uFE20-\uFE2F\uE0100-\uE01EF]/,
+    operators: /(@operatorstart)((@operatorstart)|(@operatorend))*/,
+    // TODO(owensd): These are borrowed from C#; need to validate correctness for Swift.
+    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     tokenizer: {
         root: [
             { include: '@whitespace' },
             { include: '@comment' },
-            // Directive
-            [/%[^ ]+.*$/, 'meta.directive'],
-            // Document Markers
-            [/---/, 'operators.directivesEnd'],
-            [/\.{3}/, 'operators.documentEnd'],
-            // Block Structure Indicators
-            [/[-?:](?= )/, 'operators'],
-            { include: '@anchor' },
-            { include: '@tagHandle' },
-            { include: '@flowCollections' },
-            { include: '@blockStyle' },
-            // Numbers
-            [/@numberInteger(?![ \t]*\S+)/, 'number'],
-            [/@numberFloat(?![ \t]*\S+)/, 'number.float'],
-            [/@numberOctal(?![ \t]*\S+)/, 'number.octal'],
-            [/@numberHex(?![ \t]*\S+)/, 'number.hex'],
-            [/@numberInfinity(?![ \t]*\S+)/, 'number.infinity'],
-            [/@numberNaN(?![ \t]*\S+)/, 'number.nan'],
-            [/@numberDate(?![ \t]*\S+)/, 'number.date'],
-            // Key:Value pair
-            [/(".*?"|'.*?'|.*?)([ \t]*)(:)( |$)/, ['type', 'white', 'operators', 'white']],
-            { include: '@flowScalars' },
-            // String nodes
-            [/.+$/, {
-                    cases: {
-                        '@keywords': 'keyword',
-                        '@default': 'string'
-                    }
-                }]
-        ],
-        // Flow Collection: Flow Mapping
-        object: [
-            { include: '@whitespace' },
-            { include: '@comment' },
-            // Flow Mapping termination
-            [/\}/, '@brackets', '@pop'],
-            // Flow Mapping delimiter
-            [/,/, 'delimiter.comma'],
-            // Flow Mapping Key:Value delimiter
-            [/:(?= )/, 'operators'],
-            // Flow Mapping Key:Value key
-            [/(?:".*?"|'.*?'|[^,\{\[]+?)(?=: )/, 'type'],
-            // Start Flow Style
-            { include: '@flowCollections' },
-            { include: '@flowScalars' },
-            // Scalar Data types
-            { include: '@tagHandle' },
-            { include: '@anchor' },
-            { include: '@flowNumber' },
-            // Other value (keyword or string)
-            [/[^\},]+/, {
-                    cases: {
-                        '@keywords': 'keyword',
-                        '@default': 'string'
-                    }
-                }]
-        ],
-        // Flow Collection: Flow Sequence
-        array: [
-            { include: '@whitespace' },
-            { include: '@comment' },
-            // Flow Sequence termination
-            [/\]/, '@brackets', '@pop'],
-            // Flow Sequence delimiter
-            [/,/, 'delimiter.comma'],
-            // Start Flow Style
-            { include: '@flowCollections' },
-            { include: '@flowScalars' },
-            // Scalar Data types
-            { include: '@tagHandle' },
-            { include: '@anchor' },
-            { include: '@flowNumber' },
-            // Other value (keyword or string)
-            [/[^\],]+/, {
-                    cases: {
-                        '@keywords': 'keyword',
-                        '@default': 'string'
-                    }
-                }]
-        ],
-        // First line of a Block Style
-        multiString: [
-            [/^( +).+$/, 'string', '@multiStringContinued.$1']
-        ],
-        // Further lines of a Block Style
-        //   Workaround for indentation detection
-        multiStringContinued: [
-            [/^( *).+$/, {
-                    cases: {
-                        '$1==$S2': 'string',
-                        '@default': { token: '@rematch', next: '@popall' }
-                    }
-                }]
+            { include: '@attribute' },
+            { include: '@literal' },
+            { include: '@keyword' },
+            { include: '@invokedmethod' },
+            { include: '@symbol' }
         ],
         whitespace: [
-            [/[ \t\r\n]+/, 'white']
+            [/\s+/, 'white'],
+            [/"""/, 'string.quote', '@endDblDocString']
         ],
-        // Only line comments
+        endDblDocString: [
+            [/[^"]+/, 'string'],
+            [/\\"/, 'string'],
+            [/"""/, 'string.quote', '@popall'],
+            [/"/, 'string']
+        ],
+        symbol: [
+            [/[{}()\[\]]/, '@brackets'],
+            [/[<>](?!@symbols)/, '@brackets'],
+            [/[.]/, 'delimiter'],
+            [/@operators/, 'operator'],
+            [/@symbols/, 'operator']
+        ],
         comment: [
-            [/#.*$/, 'comment']
+            [/\/\/\/.*$/, 'comment.doc'],
+            [/\/\*\*/, 'comment.doc', '@commentdocbody'],
+            [/\/\/.*$/, 'comment'],
+            [/\/\*/, 'comment', '@commentbody']
         ],
-        // Start Flow Collections
-        flowCollections: [
-            [/\[/, '@brackets', '@array'],
-            [/\{/, '@brackets', '@object']
+        commentdocbody: [
+            [/\/\*/, 'comment', '@commentbody'],
+            [/\*\//, 'comment.doc', '@pop'],
+            [/\:[a-zA-Z]+\:/, 'comment.doc.param'],
+            [/./, 'comment.doc']
         ],
-        // Start Flow Scalars (quoted strings)
-        flowScalars: [
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],
-            [/'([^'\\]|\\.)*$/, 'string.invalid'],
-            [/'[^']*'/, 'string'],
-            [/"/, 'string', '@doubleQuotedString']
+        commentbody: [
+            [/\/\*/, 'comment', '@commentbody'],
+            [/\*\//, 'comment', '@pop'],
+            [/./, 'comment']
         ],
-        doubleQuotedString: [
-            [/[^\\"]+/, 'string'],
-            [/@escapes/, 'string.escape'],
+        attribute: [
+            [
+                /\@@identifier/,
+                {
+                    cases: {
+                        '@attributes': 'keyword.control',
+                        '@default': ''
+                    }
+                }
+            ]
+        ],
+        literal: [
+            [/"/, { token: 'string.quote', next: '@stringlit' }],
+            [/0[b]([01]_?)+/, 'number.binary'],
+            [/0[o]([0-7]_?)+/, 'number.octal'],
+            [/0[x]([0-9a-fA-F]_?)+([pP][\-+](\d_?)+)?/, 'number.hex'],
+            [/(\d_?)*\.(\d_?)+([eE][\-+]?(\d_?)+)?/, 'number.float'],
+            [/(\d_?)+/, 'number']
+        ],
+        stringlit: [
+            [/\\\(/, { token: 'operator', next: '@interpolatedexpression' }],
+            [/@escapes/, 'string'],
             [/\\./, 'string.escape.invalid'],
-            [/"/, 'string', '@pop']
+            [/"/, { token: 'string.quote', next: '@pop' }],
+            [/./, 'string']
         ],
-        // Start Block Scalar
-        blockStyle: [
-            [/[>|][0-9]*[+-]?$/, 'operators', '@multiString']
+        interpolatedexpression: [
+            [/\(/, { token: 'operator', next: '@interpolatedexpression' }],
+            [/\)/, { token: 'operator', next: '@pop' }],
+            { include: '@literal' },
+            { include: '@keyword' },
+            { include: '@symbol' }
         ],
-        // Numbers in Flow Collections (terminate with ,]})
-        flowNumber: [
-            [/@numberInteger(?=[ \t]*[,\]\}])/, 'number'],
-            [/@numberFloat(?=[ \t]*[,\]\}])/, 'number.float'],
-            [/@numberOctal(?=[ \t]*[,\]\}])/, 'number.octal'],
-            [/@numberHex(?=[ \t]*[,\]\}])/, 'number.hex'],
-            [/@numberInfinity(?=[ \t]*[,\]\}])/, 'number.infinity'],
-            [/@numberNaN(?=[ \t]*[,\]\}])/, 'number.nan'],
-            [/@numberDate(?=[ \t]*[,\]\}])/, 'number.date']
+        keyword: [
+            [/`/, { token: 'operator', next: '@escapedkeyword' }],
+            [
+                /@identifier/,
+                {
+                    cases: {
+                        '@keywords': 'keyword',
+                        '[A-Z][a-zA-Z0-9$]*': 'type.identifier',
+                        '@default': 'identifier'
+                    }
+                }
+            ]
         ],
-        tagHandle: [
-            [/\![^ ]*/, 'tag']
+        escapedkeyword: [
+            [/`/, { token: 'operator', next: '@pop' }],
+            [/./, 'identifier']
         ],
-        anchor: [
-            [/[&*][^ ]+/, 'namespace']
+        //		symbol: [
+        //			[ /@symbols/, 'operator' ],
+        //			[ /@operators/, 'operator' ]
+        //		],
+        invokedmethod: [
+            [
+                /([.])(@identifier)/,
+                {
+                    cases: {
+                        $2: ['delimeter', 'type.identifier'],
+                        '@default': ''
+                    }
+                }
+            ]
         ]
     }
 };

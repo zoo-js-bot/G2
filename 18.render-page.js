@@ -1,10 +1,10 @@
 exports.ids = [18];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/go/go.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/go/go.js ***!
-  \********************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/dockerfile/dockerfile.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/dockerfile/dockerfile.js ***!
+  \************************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,12 +16,7 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
-    comments: {
-        lineComment: '//',
-        blockComment: ['/*', '*/'],
-    },
     brackets: [
         ['{', '}'],
         ['[', ']'],
@@ -31,156 +26,120 @@ var conf = {
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
-        { open: '`', close: '`', notIn: ['string'] },
-        { open: '"', close: '"', notIn: ['string'] },
-        { open: '\'', close: '\'', notIn: ['string', 'comment'] },
+        { open: '"', close: '"' },
+        { open: "'", close: "'" }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
-        { open: '`', close: '`' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: "'", close: "'" }
     ]
 };
 var language = {
     defaultToken: '',
-    tokenPostfix: '.go',
-    keywords: [
-        'break',
-        'case',
-        'chan',
-        'const',
-        'continue',
-        'default',
-        'defer',
-        'else',
-        'fallthrough',
-        'for',
-        'func',
-        'go',
-        'goto',
-        'if',
-        'import',
-        'interface',
-        'map',
-        'package',
-        'range',
-        'return',
-        'select',
-        'struct',
-        'switch',
-        'type',
-        'var',
-        'bool',
-        'true',
-        'false',
-        'uint8',
-        'uint16',
-        'uint32',
-        'uint64',
-        'int8',
-        'int16',
-        'int32',
-        'int64',
-        'float32',
-        'float64',
-        'complex64',
-        'complex128',
-        'byte',
-        'rune',
-        'uint',
-        'int',
-        'uintptr',
-        'string',
-        'nil',
-    ],
-    operators: [
-        '+', '-', '*', '/', '%', '&', '|', '^', '<<', '>>', '&^',
-        '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=', '<<=', '>>=', '&^=',
-        '&&', '||', '<-', '++', '--', '==', '<', '>', '=', '!', '!=', '<=', '>=', ':=', '...',
-        '(', ')', '', ']', '{', '}', ',', ';', '.', ':'
-    ],
-    // we include these common regular expressions
-    symbols: /[=><!~?:&|+\-*\/\^%]+/,
-    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-    // The main tokenizer for our languages
+    tokenPostfix: '.dockerfile',
+    variable: /\${?[\w]+}?/,
     tokenizer: {
         root: [
-            // identifiers and keywords
-            [/[a-zA-Z_]\w*/, {
-                    cases: {
-                        '@keywords': { token: 'keyword.$0' },
-                        '@default': 'identifier'
-                    }
-                }],
-            // whitespace
             { include: '@whitespace' },
-            // [[ attributes ]].
-            [/\[\[.*\]\]/, 'annotation'],
-            // Preprocessor directive
-            [/^\s*#\w+/, 'keyword'],
-            // delimiters and operators
-            [/[{}()\[\]]/, '@brackets'],
-            [/[<>](?!@symbols)/, '@brackets'],
-            [/@symbols/, {
+            { include: '@comment' },
+            [/(ONBUILD)(\s+)/, ['keyword', '']],
+            [/(ENV)(\s+)([\w]+)/, ['keyword', '', { token: 'variable', next: '@arguments' }]],
+            [
+                /(FROM|MAINTAINER|RUN|EXPOSE|ENV|ADD|ARG|VOLUME|LABEL|USER|WORKDIR|COPY|CMD|STOPSIGNAL|SHELL|HEALTHCHECK|ENTRYPOINT)/,
+                { token: 'keyword', next: '@arguments' }
+            ]
+        ],
+        arguments: [
+            { include: '@whitespace' },
+            { include: '@strings' },
+            [
+                /(@variable)/,
+                {
                     cases: {
-                        '@operators': 'delimiter',
+                        '@eos': { token: 'variable', next: '@popall' },
+                        '@default': 'variable'
+                    }
+                }
+            ],
+            [
+                /\\/,
+                {
+                    cases: {
+                        '@eos': '',
                         '@default': ''
                     }
-                }],
-            // numbers
-            [/\d*\d+[eE]([\-+]?\d+)?/, 'number.float'],
-            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
-            [/0[xX][0-9a-fA-F']*[0-9a-fA-F]/, 'number.hex'],
-            [/0[0-7']*[0-7]/, 'number.octal'],
-            [/0[bB][0-1']*[0-1]/, 'number.binary'],
-            [/\d[\d']*/, 'number'],
-            [/\d/, 'number'],
-            // delimiter: after number because of .\d floats
-            [/[;,.]/, 'delimiter'],
-            // strings
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],
-            [/"/, 'string', '@string'],
-            [/`/, "string", "@rawstring"],
-            // characters
-            [/'[^\\']'/, 'string'],
-            [/(')(@escapes)(')/, ['string', 'string.escape', 'string']],
-            [/'/, 'string.invalid']
+                }
+            ],
+            [
+                /./,
+                {
+                    cases: {
+                        '@eos': { token: '', next: '@popall' },
+                        '@default': ''
+                    }
+                }
+            ]
         ],
+        // Deal with white space, including comments
         whitespace: [
-            [/[ \t\r\n]+/, ''],
-            [/\/\*\*(?!\/)/, 'comment.doc', '@doccomment'],
-            [/\/\*/, 'comment', '@comment'],
-            [/\/\/.*$/, 'comment'],
+            [
+                /\s+/,
+                {
+                    cases: {
+                        '@eos': { token: '', next: '@popall' },
+                        '@default': ''
+                    }
+                }
+            ]
         ],
-        comment: [
-            [/[^\/*]+/, 'comment'],
-            // [/\/\*/, 'comment', '@push' ],    // nested comment not allowed :-(
-            // [/\/\*/,    'comment.invalid' ],    // this breaks block comments in the shape of /* //*/
-            [/\*\//, 'comment', '@pop'],
-            [/[\/*]/, 'comment']
+        comment: [[/(^#.*$)/, 'comment', '@popall']],
+        // Recognize strings, including those broken across lines with \ (but not without)
+        strings: [
+            [/\\'$/, '', '@popall'],
+            [/\\'/, ''],
+            [/'$/, 'string', '@popall'],
+            [/'/, 'string', '@stringBody'],
+            [/"$/, 'string', '@popall'],
+            [/"/, 'string', '@dblStringBody']
         ],
-        //Identical copy of comment above, except for the addition of .doc
-        doccomment: [
-            [/[^\/*]+/, 'comment.doc'],
-            // [/\/\*/, 'comment.doc', '@push' ],    // nested comment not allowed :-(
-            [/\/\*/, 'comment.doc.invalid'],
-            [/\*\//, 'comment.doc', '@pop'],
-            [/[\/*]/, 'comment.doc']
+        stringBody: [
+            [
+                /[^\\\$']/,
+                {
+                    cases: {
+                        '@eos': { token: 'string', next: '@popall' },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [/\\./, 'string.escape'],
+            [/'$/, 'string', '@popall'],
+            [/'/, 'string', '@pop'],
+            [/(@variable)/, 'variable'],
+            [/\\$/, 'string'],
+            [/$/, 'string', '@popall']
         ],
-        string: [
-            [/[^\\"]+/, 'string'],
-            [/@escapes/, 'string.escape'],
-            [/\\./, 'string.escape.invalid'],
-            [/"/, 'string', '@pop']
-        ],
-        rawstring: [
-            [/[^\`]/, "string"],
-            [/`/, "string", "@pop"]
-        ],
-    },
+        dblStringBody: [
+            [
+                /[^\\\$"]/,
+                {
+                    cases: {
+                        '@eos': { token: 'string', next: '@popall' },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [/\\./, 'string.escape'],
+            [/"$/, 'string', '@popall'],
+            [/"/, 'string', '@pop'],
+            [/(@variable)/, 'variable'],
+            [/\\$/, 'string'],
+            [/$/, 'string', '@popall']
+        ]
+    }
 };
 
 

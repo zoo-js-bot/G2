@@ -1,10 +1,10 @@
 exports.ids = [48];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/rust/rust.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/rust/rust.js ***!
-  \************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/razor/razor.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/razor/razor.js ***!
+  \**************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12,159 +12,528 @@ exports.modules = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "conf", function() { return conf; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "language", function() { return language; });
+/* harmony import */ var _fillers_monaco_editor_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../fillers/monaco-editor-core.js */ "./node_modules/monaco-editor/esm/vs/basic-languages/fillers/monaco-editor-core.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+var EMPTY_ELEMENTS = [
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'keygen',
+    'link',
+    'menuitem',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr'
+];
 var conf = {
+    wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\$\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/g,
     comments: {
-        lineComment: '//',
-        blockComment: ['/*', '*/'],
+        blockComment: ['<!--', '-->']
     },
     brackets: [
+        ['<!--', '-->'],
+        ['<', '>'],
         ['{', '}'],
-        ['[', ']'],
         ['(', ')']
     ],
     autoClosingPairs: [
-        { open: '[', close: ']' },
-        { open: '{', close: '}' },
-        { open: '(', close: ')' },
-        { open: '\'', close: '\'', notIn: ['string', 'comment'] },
-        { open: '"', close: '"', notIn: ['string'] },
-    ],
-    surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: "'", close: "'" }
     ],
-    folding: {
-        markers: {
-            start: new RegExp("^\\s*#pragma\\s+region\\b"),
-            end: new RegExp("^\\s*#pragma\\s+endregion\\b")
+    surroundingPairs: [
+        { open: '"', close: '"' },
+        { open: "'", close: "'" },
+        { open: '<', close: '>' }
+    ],
+    onEnterRules: [
+        {
+            beforeText: new RegExp("<(?!(?:" + EMPTY_ELEMENTS.join('|') + "))(\\w[\\w\\d]*)([^/>]*(?!/)>)[^<]*$", 'i'),
+            afterText: /^<\/(\w[\w\d]*)\s*>$/i,
+            action: {
+                indentAction: _fillers_monaco_editor_core_js__WEBPACK_IMPORTED_MODULE_0__["languages"].IndentAction.IndentOutdent
+            }
+        },
+        {
+            beforeText: new RegExp("<(?!(?:" + EMPTY_ELEMENTS.join('|') + "))(\\w[\\w\\d]*)([^/>]*(?!/)>)[^<]*$", 'i'),
+            action: { indentAction: _fillers_monaco_editor_core_js__WEBPACK_IMPORTED_MODULE_0__["languages"].IndentAction.Indent }
         }
-    }
+    ]
 };
 var language = {
-    tokenPostfix: '.rust',
-    defaultToken: 'invalid',
-    keywords: [
-        'as', 'box', 'break', 'const', 'continue', 'crate', 'else', 'enum',
-        'extern', 'false', 'fn', 'for', 'if', 'impl', 'in', 'let', 'loop',
-        'match', 'mod', 'move', 'mut', 'pub', 'ref', 'return', 'self',
-        'static', 'struct', 'super', 'trait', 'true', 'type', 'unsafe', 'use',
-        'where', 'while', 'catch', 'default', 'union', 'static', 'abstract',
-        'alignof', 'become', 'do', 'final', 'macro', 'offsetof', 'override',
-        'priv', 'proc', 'pure', 'sizeof', 'typeof', 'unsized', 'virtual',
-        'yield',
-    ],
-    typeKeywords: [
-        'Self', 'm32', 'm64', 'm128', 'f80', 'f16', 'f128', 'int', 'uint',
-        'float', 'char', 'bool', 'u8', 'u16', 'u32', 'u64', 'f32', 'f64', 'i8',
-        'i16', 'i32', 'i64', 'str', 'Option', 'Either', 'c_float', 'c_double',
-        'c_void', 'FILE', 'fpos_t', 'DIR', 'dirent', 'c_char', 'c_schar',
-        'c_uchar', 'c_short', 'c_ushort', 'c_int', 'c_uint', 'c_long',
-        'c_ulong', 'size_t', 'ptrdiff_t', 'clock_t', 'time_t', 'c_longlong',
-        'c_ulonglong', 'intptr_t', 'uintptr_t', 'off_t', 'dev_t', 'ino_t',
-        'pid_t', 'mode_t', 'ssize_t',
-    ],
-    constants: [
-        'true', 'false', 'Some', 'None', 'Left', 'Right', 'Ok', 'Err',
-    ],
-    supportConstants: [
-        'EXIT_FAILURE', 'EXIT_SUCCESS', 'RAND_MAX', 'EOF', 'SEEK_SET',
-        'SEEK_CUR', 'SEEK_END', '_IOFBF', '_IONBF', '_IOLBF', 'BUFSIZ',
-        'FOPEN_MAX', 'FILENAME_MAX', 'L_tmpnam', 'TMP_MAX', 'O_RDONLY',
-        'O_WRONLY', 'O_RDWR', 'O_APPEND', 'O_CREAT', 'O_EXCL', 'O_TRUNC',
-        'S_IFIFO', 'S_IFCHR', 'S_IFBLK', 'S_IFDIR', 'S_IFREG', 'S_IFMT',
-        'S_IEXEC', 'S_IWRITE', 'S_IREAD', 'S_IRWXU', 'S_IXUSR', 'S_IWUSR',
-        'S_IRUSR', 'F_OK', 'R_OK', 'W_OK', 'X_OK', 'STDIN_FILENO',
-        'STDOUT_FILENO', 'STDERR_FILENO',
-    ],
-    supportMacros: [
-        'format!', 'print!', 'println!', 'panic!', 'format_args!', 'unreachable!',
-        'write!', 'writeln!'
-    ],
-    operators: [
-        '!', '!=', '%', '%=', '&', '&=', '&&', '*', '*=', '+', '+=', '-', '-=',
-        '->', '.', '..', '...', '/', '/=', ':', ';', '<<', '<<=', '<', '<=', '=',
-        '==', '=>', '>', '>=', '>>', '>>=', '@', '^', '^=', '|', '|=', '||', '_',
-        '?', '#'
-    ],
-    escapes: /\\([nrt0\"''\\]|x\h{2}|u\{\h{1,6}\})/,
-    delimiters: /[,]/,
-    symbols: /[\#\!\%\&\*\+\-\.\/\:\;\<\=\>\@\^\|_\?]+/,
-    intSuffixes: /[iu](8|16|32|64|128|size)/,
-    floatSuffixes: /f(32|64)/,
+    defaultToken: '',
+    tokenPostfix: '',
+    // ignoreCase: true,
+    // The main tokenizer for our languages
     tokenizer: {
         root: [
-            [/[a-zA-Z][a-zA-Z0-9_]*!?|_[a-zA-Z0-9_]+/,
+            [/@@/],
+            [/@[^@]/, { token: '@rematch', switchTo: '@razorInSimpleState.root' }],
+            [/<!DOCTYPE/, 'metatag.html', '@doctype'],
+            [/<!--/, 'comment.html', '@comment'],
+            [/(<)(\w+)(\/>)/, ['delimiter.html', 'tag.html', 'delimiter.html']],
+            [/(<)(script)/, ['delimiter.html', { token: 'tag.html', next: '@script' }]],
+            [/(<)(style)/, ['delimiter.html', { token: 'tag.html', next: '@style' }]],
+            [/(<)([:\w]+)/, ['delimiter.html', { token: 'tag.html', next: '@otherTag' }]],
+            [/(<\/)(\w+)/, ['delimiter.html', { token: 'tag.html', next: '@otherTag' }]],
+            [/</, 'delimiter.html'],
+            [/[ \t\r\n]+/],
+            [/[^<@]+/] // text
+        ],
+        doctype: [
+            [/@[^@]/, { token: '@rematch', switchTo: '@razorInSimpleState.comment' }],
+            [/[^>]+/, 'metatag.content.html'],
+            [/>/, 'metatag.html', '@pop']
+        ],
+        comment: [
+            [/@[^@]/, { token: '@rematch', switchTo: '@razorInSimpleState.comment' }],
+            [/-->/, 'comment.html', '@pop'],
+            [/[^-]+/, 'comment.content.html'],
+            [/./, 'comment.content.html']
+        ],
+        otherTag: [
+            [/@[^@]/, { token: '@rematch', switchTo: '@razorInSimpleState.otherTag' }],
+            [/\/?>/, 'delimiter.html', '@pop'],
+            [/"([^"]*)"/, 'attribute.value'],
+            [/'([^']*)'/, 'attribute.value'],
+            [/[\w\-]+/, 'attribute.name'],
+            [/=/, 'delimiter'],
+            [/[ \t\r\n]+/] // whitespace
+        ],
+        // -- BEGIN <script> tags handling
+        // After <script
+        script: [
+            [/@[^@]/, { token: '@rematch', switchTo: '@razorInSimpleState.script' }],
+            [/type/, 'attribute.name', '@scriptAfterType'],
+            [/"([^"]*)"/, 'attribute.value'],
+            [/'([^']*)'/, 'attribute.value'],
+            [/[\w\-]+/, 'attribute.name'],
+            [/=/, 'delimiter'],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@scriptEmbedded.text/javascript',
+                    nextEmbedded: 'text/javascript'
+                }
+            ],
+            [/[ \t\r\n]+/],
+            [
+                /(<\/)(script\s*)(>)/,
+                ['delimiter.html', 'tag.html', { token: 'delimiter.html', next: '@pop' }]
+            ]
+        ],
+        // After <script ... type
+        scriptAfterType: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInSimpleState.scriptAfterType'
+                }
+            ],
+            [/=/, 'delimiter', '@scriptAfterTypeEquals'],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@scriptEmbedded.text/javascript',
+                    nextEmbedded: 'text/javascript'
+                }
+            ],
+            [/[ \t\r\n]+/],
+            [/<\/script\s*>/, { token: '@rematch', next: '@pop' }]
+        ],
+        // After <script ... type =
+        scriptAfterTypeEquals: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInSimpleState.scriptAfterTypeEquals'
+                }
+            ],
+            [
+                /"([^"]*)"/,
+                {
+                    token: 'attribute.value',
+                    switchTo: '@scriptWithCustomType.$1'
+                }
+            ],
+            [
+                /'([^']*)'/,
+                {
+                    token: 'attribute.value',
+                    switchTo: '@scriptWithCustomType.$1'
+                }
+            ],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@scriptEmbedded.text/javascript',
+                    nextEmbedded: 'text/javascript'
+                }
+            ],
+            [/[ \t\r\n]+/],
+            [/<\/script\s*>/, { token: '@rematch', next: '@pop' }]
+        ],
+        // After <script ... type = $S2
+        scriptWithCustomType: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInSimpleState.scriptWithCustomType.$S2'
+                }
+            ],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@scriptEmbedded.$S2',
+                    nextEmbedded: '$S2'
+                }
+            ],
+            [/"([^"]*)"/, 'attribute.value'],
+            [/'([^']*)'/, 'attribute.value'],
+            [/[\w\-]+/, 'attribute.name'],
+            [/=/, 'delimiter'],
+            [/[ \t\r\n]+/],
+            [/<\/script\s*>/, { token: '@rematch', next: '@pop' }]
+        ],
+        scriptEmbedded: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInEmbeddedState.scriptEmbedded.$S2',
+                    nextEmbedded: '@pop'
+                }
+            ],
+            [/<\/script/, { token: '@rematch', next: '@pop', nextEmbedded: '@pop' }]
+        ],
+        // -- END <script> tags handling
+        // -- BEGIN <style> tags handling
+        // After <style
+        style: [
+            [/@[^@]/, { token: '@rematch', switchTo: '@razorInSimpleState.style' }],
+            [/type/, 'attribute.name', '@styleAfterType'],
+            [/"([^"]*)"/, 'attribute.value'],
+            [/'([^']*)'/, 'attribute.value'],
+            [/[\w\-]+/, 'attribute.name'],
+            [/=/, 'delimiter'],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@styleEmbedded.text/css',
+                    nextEmbedded: 'text/css'
+                }
+            ],
+            [/[ \t\r\n]+/],
+            [
+                /(<\/)(style\s*)(>)/,
+                ['delimiter.html', 'tag.html', { token: 'delimiter.html', next: '@pop' }]
+            ]
+        ],
+        // After <style ... type
+        styleAfterType: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInSimpleState.styleAfterType'
+                }
+            ],
+            [/=/, 'delimiter', '@styleAfterTypeEquals'],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@styleEmbedded.text/css',
+                    nextEmbedded: 'text/css'
+                }
+            ],
+            [/[ \t\r\n]+/],
+            [/<\/style\s*>/, { token: '@rematch', next: '@pop' }]
+        ],
+        // After <style ... type =
+        styleAfterTypeEquals: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInSimpleState.styleAfterTypeEquals'
+                }
+            ],
+            [
+                /"([^"]*)"/,
+                {
+                    token: 'attribute.value',
+                    switchTo: '@styleWithCustomType.$1'
+                }
+            ],
+            [
+                /'([^']*)'/,
+                {
+                    token: 'attribute.value',
+                    switchTo: '@styleWithCustomType.$1'
+                }
+            ],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@styleEmbedded.text/css',
+                    nextEmbedded: 'text/css'
+                }
+            ],
+            [/[ \t\r\n]+/],
+            [/<\/style\s*>/, { token: '@rematch', next: '@pop' }]
+        ],
+        // After <style ... type = $S2
+        styleWithCustomType: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInSimpleState.styleWithCustomType.$S2'
+                }
+            ],
+            [
+                />/,
+                {
+                    token: 'delimiter.html',
+                    next: '@styleEmbedded.$S2',
+                    nextEmbedded: '$S2'
+                }
+            ],
+            [/"([^"]*)"/, 'attribute.value'],
+            [/'([^']*)'/, 'attribute.value'],
+            [/[\w\-]+/, 'attribute.name'],
+            [/=/, 'delimiter'],
+            [/[ \t\r\n]+/],
+            [/<\/style\s*>/, { token: '@rematch', next: '@pop' }]
+        ],
+        styleEmbedded: [
+            [
+                /@[^@]/,
+                {
+                    token: '@rematch',
+                    switchTo: '@razorInEmbeddedState.styleEmbedded.$S2',
+                    nextEmbedded: '@pop'
+                }
+            ],
+            [/<\/style/, { token: '@rematch', next: '@pop', nextEmbedded: '@pop' }]
+        ],
+        // -- END <style> tags handling
+        razorInSimpleState: [
+            [/@\*/, 'comment.cs', '@razorBlockCommentTopLevel'],
+            [/@[{(]/, 'metatag.cs', '@razorRootTopLevel'],
+            [/(@)(\s*[\w]+)/, ['metatag.cs', { token: 'identifier.cs', switchTo: '@$S2.$S3' }]],
+            [/[})]/, { token: 'metatag.cs', switchTo: '@$S2.$S3' }],
+            [/\*@/, { token: 'comment.cs', switchTo: '@$S2.$S3' }]
+        ],
+        razorInEmbeddedState: [
+            [/@\*/, 'comment.cs', '@razorBlockCommentTopLevel'],
+            [/@[{(]/, 'metatag.cs', '@razorRootTopLevel'],
+            [
+                /(@)(\s*[\w]+)/,
+                [
+                    'metatag.cs',
+                    {
+                        token: 'identifier.cs',
+                        switchTo: '@$S2.$S3',
+                        nextEmbedded: '$S3'
+                    }
+                ]
+            ],
+            [
+                /[})]/,
+                {
+                    token: 'metatag.cs',
+                    switchTo: '@$S2.$S3',
+                    nextEmbedded: '$S3'
+                }
+            ],
+            [
+                /\*@/,
+                {
+                    token: 'comment.cs',
+                    switchTo: '@$S2.$S3',
+                    nextEmbedded: '$S3'
+                }
+            ]
+        ],
+        razorBlockCommentTopLevel: [
+            [/\*@/, '@rematch', '@pop'],
+            [/[^*]+/, 'comment.cs'],
+            [/./, 'comment.cs']
+        ],
+        razorBlockComment: [
+            [/\*@/, 'comment.cs', '@pop'],
+            [/[^*]+/, 'comment.cs'],
+            [/./, 'comment.cs']
+        ],
+        razorRootTopLevel: [
+            [/\{/, 'delimiter.bracket.cs', '@razorRoot'],
+            [/\(/, 'delimiter.parenthesis.cs', '@razorRoot'],
+            [/[})]/, '@rematch', '@pop'],
+            { include: 'razorCommon' }
+        ],
+        razorRoot: [
+            [/\{/, 'delimiter.bracket.cs', '@razorRoot'],
+            [/\(/, 'delimiter.parenthesis.cs', '@razorRoot'],
+            [/\}/, 'delimiter.bracket.cs', '@pop'],
+            [/\)/, 'delimiter.parenthesis.cs', '@pop'],
+            { include: 'razorCommon' }
+        ],
+        razorCommon: [
+            [
+                /[a-zA-Z_]\w*/,
                 {
                     cases: {
-                        '@typeKeywords': 'keyword.type',
-                        '@keywords': 'keyword',
-                        '@supportConstants': 'keyword',
-                        '@supportMacros': 'keyword',
-                        '@constants': 'keyword',
-                        '@default': 'identifier',
+                        '@razorKeywords': { token: 'keyword.cs' },
+                        '@default': 'identifier.cs'
                     }
                 }
             ],
-            // Designator
-            [/\$/, 'identifier'],
-            // Lifetime annotations
-            [/'[a-zA-Z_][a-zA-Z0-9_]*(?=[^\'])/, 'identifier'],
-            // Byte literal
-            [/'\S'/, 'string.byteliteral'],
-            // Strings
-            [/"/, { token: 'string.quote', bracket: '@open', next: '@string' }],
-            { include: '@numbers' },
-            // Whitespace + comments
-            { include: '@whitespace' },
-            [/@delimiters/, {
-                    cases: {
-                        '@keywords': 'keyword',
-                        '@default': 'delimiter'
-                    }
-                }],
-            [/[{}()\[\]<>]/, '@brackets'],
-            [/@symbols/, { cases: { '@operators': 'operator', '@default': '' } }],
-        ],
-        whitespace: [
-            [/[ \t\r\n]+/, 'white'],
-            [/\/\*/, 'comment', '@comment'],
-            [/\/\/.*$/, 'comment'],
-        ],
-        comment: [
-            [/[^\/*]+/, 'comment'],
-            [/\/\*/, 'comment', '@push'],
-            ["\\*/", 'comment', '@pop'],
-            [/[\/*]/, 'comment']
-        ],
-        string: [
-            [/[^\\"]+/, 'string'],
-            [/@escapes/, 'string.escape'],
-            [/\\./, 'string.escape.invalid'],
-            [/"/, { token: 'string.quote', bracket: '@close', next: '@pop' }]
-        ],
-        numbers: [
-            //Octal
-            [/(0o[0-7_]+)(@intSuffixes)?/, { token: 'number' }],
-            //Binary
-            [/(0b[0-1_]+)(@intSuffixes)?/, { token: 'number' }],
-            //Exponent
-            [/[\d][\d_]*(\.[\d][\d_]*)?[eE][+-][\d_]+(@floatSuffixes)?/, { token: 'number' }],
-            //Float
-            [/\b(\d\.?[\d_]*)(@floatSuffixes)?\b/, { token: 'number' }],
-            //Hexadecimal
-            [/(0x[\da-fA-F]+)_?(@intSuffixes)?/, { token: 'number' }],
-            //Integer
-            [/[\d][\d_]*(@intSuffixes?)?/, { token: 'number' }],
+            // brackets
+            [/[\[\]]/, 'delimiter.array.cs'],
+            // whitespace
+            [/[ \t\r\n]+/],
+            // comments
+            [/\/\/.*$/, 'comment.cs'],
+            [/@\*/, 'comment.cs', '@razorBlockComment'],
+            // strings
+            [/"([^"]*)"/, 'string.cs'],
+            [/'([^']*)'/, 'string.cs'],
+            // simple html
+            [/(<)(\w+)(\/>)/, ['delimiter.html', 'tag.html', 'delimiter.html']],
+            [/(<)(\w+)(>)/, ['delimiter.html', 'tag.html', 'delimiter.html']],
+            [/(<\/)(\w+)(>)/, ['delimiter.html', 'tag.html', 'delimiter.html']],
+            // delimiters
+            [/[\+\-\*\%\&\|\^\~\!\=\<\>\/\?\;\:\.\,]/, 'delimiter.cs'],
+            // numbers
+            [/\d*\d+[eE]([\-+]?\d+)?/, 'number.float.cs'],
+            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float.cs'],
+            [/0[xX][0-9a-fA-F']*[0-9a-fA-F]/, 'number.hex.cs'],
+            [/0[0-7']*[0-7]/, 'number.octal.cs'],
+            [/0[bB][0-1']*[0-1]/, 'number.binary.cs'],
+            [/\d[\d']*/, 'number.cs'],
+            [/\d/, 'number.cs']
         ]
-    }
+    },
+    razorKeywords: [
+        'abstract',
+        'as',
+        'async',
+        'await',
+        'base',
+        'bool',
+        'break',
+        'by',
+        'byte',
+        'case',
+        'catch',
+        'char',
+        'checked',
+        'class',
+        'const',
+        'continue',
+        'decimal',
+        'default',
+        'delegate',
+        'do',
+        'double',
+        'descending',
+        'explicit',
+        'event',
+        'extern',
+        'else',
+        'enum',
+        'false',
+        'finally',
+        'fixed',
+        'float',
+        'for',
+        'foreach',
+        'from',
+        'goto',
+        'group',
+        'if',
+        'implicit',
+        'in',
+        'int',
+        'interface',
+        'internal',
+        'into',
+        'is',
+        'lock',
+        'long',
+        'nameof',
+        'new',
+        'null',
+        'namespace',
+        'object',
+        'operator',
+        'out',
+        'override',
+        'orderby',
+        'params',
+        'private',
+        'protected',
+        'public',
+        'readonly',
+        'ref',
+        'return',
+        'switch',
+        'struct',
+        'sbyte',
+        'sealed',
+        'short',
+        'sizeof',
+        'stackalloc',
+        'static',
+        'string',
+        'select',
+        'this',
+        'throw',
+        'true',
+        'try',
+        'typeof',
+        'uint',
+        'ulong',
+        'unchecked',
+        'unsafe',
+        'ushort',
+        'using',
+        'var',
+        'virtual',
+        'volatile',
+        'void',
+        'when',
+        'while',
+        'where',
+        'yield',
+        'model',
+        'inject' // Razor specific
+    ],
+    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/
 };
 
 

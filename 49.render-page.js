@@ -1,10 +1,10 @@
 exports.ids = [49];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/sb/sb.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/sb/sb.js ***!
-  \********************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/redis/redis.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/redis/redis.js ***!
+  \**************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,97 +16,304 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
-    comments: {
-        lineComment: '\'',
-    },
     brackets: [
-        ['(', ')'], ['[', ']'],
-        ['If', 'EndIf'],
-        ['While', 'EndWhile'],
-        ['For', 'EndFor'],
-        ['Sub', 'EndSub']
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')']
     ],
     autoClosingPairs: [
-        { open: '"', close: '"', notIn: ['string', 'comment'] },
-        { open: '(', close: ')', notIn: ['string', 'comment'] },
-        { open: '[', close: ']', notIn: ['string', 'comment'] },
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"' },
+        { open: "'", close: "'" }
+    ],
+    surroundingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"' },
+        { open: "'", close: "'" }
     ]
 };
 var language = {
     defaultToken: '',
-    tokenPostfix: '.sb',
+    tokenPostfix: '.redis',
     ignoreCase: true,
     brackets: [
-        { token: 'delimiter.array', open: '[', close: ']' },
-        { token: 'delimiter.parenthesis', open: '(', close: ')' },
-        // Special bracket statement pairs
-        { token: 'keyword.tag-if', open: 'If', close: 'EndIf' },
-        { token: 'keyword.tag-while', open: 'While', close: 'EndWhile' },
-        { token: 'keyword.tag-for', open: 'For', close: 'EndFor' },
-        { token: 'keyword.tag-sub', open: 'Sub', close: 'EndSub' },
+        { open: '[', close: ']', token: 'delimiter.square' },
+        { open: '(', close: ')', token: 'delimiter.parenthesis' }
     ],
     keywords: [
-        'Else', 'ElseIf', 'EndFor', 'EndIf', 'EndSub', 'EndWhile',
-        'For', 'Goto', 'If', 'Step', 'Sub', 'Then', 'To', 'While'
+        'APPEND',
+        'AUTH',
+        'BGREWRITEAOF',
+        'BGSAVE',
+        'BITCOUNT',
+        'BITFIELD',
+        'BITOP',
+        'BITPOS',
+        'BLPOP',
+        'BRPOP',
+        'BRPOPLPUSH',
+        'CLIENT',
+        'KILL',
+        'LIST',
+        'GETNAME',
+        'PAUSE',
+        'REPLY',
+        'SETNAME',
+        'CLUSTER',
+        'ADDSLOTS',
+        'COUNT-FAILURE-REPORTS',
+        'COUNTKEYSINSLOT',
+        'DELSLOTS',
+        'FAILOVER',
+        'FORGET',
+        'GETKEYSINSLOT',
+        'INFO',
+        'KEYSLOT',
+        'MEET',
+        'NODES',
+        'REPLICATE',
+        'RESET',
+        'SAVECONFIG',
+        'SET-CONFIG-EPOCH',
+        'SETSLOT',
+        'SLAVES',
+        'SLOTS',
+        'COMMAND',
+        'COUNT',
+        'GETKEYS',
+        'CONFIG',
+        'GET',
+        'REWRITE',
+        'SET',
+        'RESETSTAT',
+        'DBSIZE',
+        'DEBUG',
+        'OBJECT',
+        'SEGFAULT',
+        'DECR',
+        'DECRBY',
+        'DEL',
+        'DISCARD',
+        'DUMP',
+        'ECHO',
+        'EVAL',
+        'EVALSHA',
+        'EXEC',
+        'EXISTS',
+        'EXPIRE',
+        'EXPIREAT',
+        'FLUSHALL',
+        'FLUSHDB',
+        'GEOADD',
+        'GEOHASH',
+        'GEOPOS',
+        'GEODIST',
+        'GEORADIUS',
+        'GEORADIUSBYMEMBER',
+        'GETBIT',
+        'GETRANGE',
+        'GETSET',
+        'HDEL',
+        'HEXISTS',
+        'HGET',
+        'HGETALL',
+        'HINCRBY',
+        'HINCRBYFLOAT',
+        'HKEYS',
+        'HLEN',
+        'HMGET',
+        'HMSET',
+        'HSET',
+        'HSETNX',
+        'HSTRLEN',
+        'HVALS',
+        'INCR',
+        'INCRBY',
+        'INCRBYFLOAT',
+        'KEYS',
+        'LASTSAVE',
+        'LINDEX',
+        'LINSERT',
+        'LLEN',
+        'LPOP',
+        'LPUSH',
+        'LPUSHX',
+        'LRANGE',
+        'LREM',
+        'LSET',
+        'LTRIM',
+        'MGET',
+        'MIGRATE',
+        'MONITOR',
+        'MOVE',
+        'MSET',
+        'MSETNX',
+        'MULTI',
+        'PERSIST',
+        'PEXPIRE',
+        'PEXPIREAT',
+        'PFADD',
+        'PFCOUNT',
+        'PFMERGE',
+        'PING',
+        'PSETEX',
+        'PSUBSCRIBE',
+        'PUBSUB',
+        'PTTL',
+        'PUBLISH',
+        'PUNSUBSCRIBE',
+        'QUIT',
+        'RANDOMKEY',
+        'READONLY',
+        'READWRITE',
+        'RENAME',
+        'RENAMENX',
+        'RESTORE',
+        'ROLE',
+        'RPOP',
+        'RPOPLPUSH',
+        'RPUSH',
+        'RPUSHX',
+        'SADD',
+        'SAVE',
+        'SCARD',
+        'SCRIPT',
+        'FLUSH',
+        'LOAD',
+        'SDIFF',
+        'SDIFFSTORE',
+        'SELECT',
+        'SETBIT',
+        'SETEX',
+        'SETNX',
+        'SETRANGE',
+        'SHUTDOWN',
+        'SINTER',
+        'SINTERSTORE',
+        'SISMEMBER',
+        'SLAVEOF',
+        'SLOWLOG',
+        'SMEMBERS',
+        'SMOVE',
+        'SORT',
+        'SPOP',
+        'SRANDMEMBER',
+        'SREM',
+        'STRLEN',
+        'SUBSCRIBE',
+        'SUNION',
+        'SUNIONSTORE',
+        'SWAPDB',
+        'SYNC',
+        'TIME',
+        'TOUCH',
+        'TTL',
+        'TYPE',
+        'UNSUBSCRIBE',
+        'UNLINK',
+        'UNWATCH',
+        'WAIT',
+        'WATCH',
+        'ZADD',
+        'ZCARD',
+        'ZCOUNT',
+        'ZINCRBY',
+        'ZINTERSTORE',
+        'ZLEXCOUNT',
+        'ZRANGE',
+        'ZRANGEBYLEX',
+        'ZREVRANGEBYLEX',
+        'ZRANGEBYSCORE',
+        'ZRANK',
+        'ZREM',
+        'ZREMRANGEBYLEX',
+        'ZREMRANGEBYRANK',
+        'ZREMRANGEBYSCORE',
+        'ZREVRANGE',
+        'ZREVRANGEBYSCORE',
+        'ZREVRANK',
+        'ZSCORE',
+        'ZUNIONSTORE',
+        'SCAN',
+        'SSCAN',
+        'HSCAN',
+        'ZSCAN'
     ],
-    tagwords: [
-        'If', 'Sub', 'While', 'For'
+    operators: [
+    // NOT SUPPORTED
     ],
-    operators: ['>', '<', '<>', '<=', '>=', 'And', 'Or', '+', '-', '*', '/', '='],
-    // we include these common regular expressions
-    identifier: /[a-zA-Z_][\w]*/,
-    symbols: /[=><:+\-*\/%\.,]+/,
-    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-    // The main tokenizer for our languages
+    builtinFunctions: [
+    // NOT SUPPORTED
+    ],
+    builtinVariables: [
+    // NOT SUPPORTED
+    ],
+    pseudoColumns: [
+    // NOT SUPPORTED
+    ],
     tokenizer: {
         root: [
-            // whitespace
             { include: '@whitespace' },
-            // classes
-            [/(@identifier)(?=[.])/, 'type'],
-            // identifiers, tagwords, and keywords
-            [/@identifier/, {
+            { include: '@pseudoColumns' },
+            { include: '@numbers' },
+            { include: '@strings' },
+            { include: '@scopes' },
+            [/[;,.]/, 'delimiter'],
+            [/[()]/, '@brackets'],
+            [
+                /[\w@#$]+/,
+                {
                     cases: {
-                        '@keywords': { token: 'keyword.$0' },
+                        '@keywords': 'keyword',
                         '@operators': 'operator',
-                        '@default': 'variable.name'
+                        '@builtinVariables': 'predefined',
+                        '@builtinFunctions': 'predefined',
+                        '@default': 'identifier'
                     }
-                }],
-            // methods, properties, and events
-            [/([.])(@identifier)/, {
-                    cases: {
-                        '$2': ['delimiter', 'type.member'],
-                        '@default': ''
-                    }
-                }],
-            // numbers
-            [/\d*\.\d+/, 'number.float'],
-            [/\d+/, 'number'],
-            // delimiters and operators
-            [/[()\[\]]/, '@brackets'],
-            [/@symbols/, {
-                    cases: {
-                        '@operators': 'operator',
-                        '@default': 'delimiter'
-                    }
-                }],
-            // strings
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],
-            [/"/, 'string', '@string'],
+                }
+            ],
+            [/[<>=!%&+\-*/|~^]/, 'operator']
         ],
-        whitespace: [
-            [/[ \t\r\n]+/, ''],
-            [/(\').*$/, 'comment']
+        whitespace: [[/\s+/, 'white']],
+        pseudoColumns: [
+            [
+                /[$][A-Za-z_][\w@#$]*/,
+                {
+                    cases: {
+                        '@pseudoColumns': 'predefined',
+                        '@default': 'identifier'
+                    }
+                }
+            ]
+        ],
+        numbers: [
+            [/0[xX][0-9a-fA-F]*/, 'number'],
+            [/[$][+-]*\d*(\.\d*)?/, 'number'],
+            [/((\d+(\.\d*)?)|(\.\d+))([eE][\-+]?\d+)?/, 'number']
+        ],
+        strings: [
+            [/'/, { token: 'string', next: '@string' }],
+            [/"/, { token: 'string.double', next: '@stringDouble' }]
         ],
         string: [
-            [/[^\\"]+/, 'string'],
-            [/@escapes/, 'string.escape'],
-            [/\\./, 'string.escape.invalid'],
-            [/"C?/, 'string', '@pop']
+            [/[^']+/, 'string'],
+            [/''/, 'string'],
+            [/'/, { token: 'string', next: '@pop' }]
         ],
-    },
+        stringDouble: [
+            [/[^"]+/, 'string.double'],
+            [/""/, 'string.double'],
+            [/"/, { token: 'string.double', next: '@pop' }]
+        ],
+        scopes: [
+        // NOT SUPPORTED
+        ]
+    }
 };
 
 

@@ -1,10 +1,10 @@
 exports.ids = [23];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/java/java.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/java/java.js ***!
-  \************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/hcl/hcl.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/hcl/hcl.js ***!
+  \**********************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,136 +16,185 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
-    // the default separators except `@$`
-    wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\#\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
     comments: {
         lineComment: '//',
-        blockComment: ['/*', '*/'],
+        blockComment: ['/*', '*/']
     },
     brackets: [
         ['{', '}'],
         ['[', ']'],
-        ['(', ')'],
+        ['(', ')']
     ],
     autoClosingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
-        { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: '"', close: '"', notIn: ['string'] }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
-        { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
-        { open: '<', close: '>' },
-    ],
-    folding: {
-        markers: {
-            start: new RegExp("^\\s*//\\s*(?:(?:#?region\\b)|(?:<editor-fold\\b))"),
-            end: new RegExp("^\\s*//\\s*(?:(?:#?endregion\\b)|(?:</editor-fold>))")
-        }
-    }
+        { open: '"', close: '"' }
+    ]
 };
 var language = {
     defaultToken: '',
-    tokenPostfix: '.java',
+    tokenPostfix: '.hcl',
     keywords: [
-        'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default',
-        'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private',
-        'this', 'break', 'double', 'implements', 'protected', 'throw', 'byte',
-        'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return',
-        'transient', 'catch', 'extends', 'int', 'short', 'try', 'char', 'final',
-        'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp',
-        'volatile', 'const', 'float', 'native', 'super', 'while', 'true', 'false'
+        'var',
+        'local',
+        'path',
+        'for_each',
+        'any',
+        'string',
+        'number',
+        'bool',
+        'true',
+        'false',
+        'null',
+        'if ',
+        'else ',
+        'endif ',
+        'for ',
+        'in',
+        'endfor'
     ],
     operators: [
-        '=', '>', '<', '!', '~', '?', ':',
-        '==', '<=', '>=', '!=', '&&', '||', '++', '--',
-        '+', '-', '*', '/', '&', '|', '^', '%', '<<',
-        '>>', '>>>', '+=', '-=', '*=', '/=', '&=', '|=',
-        '^=', '%=', '<<=', '>>=', '>>>='
+        '=',
+        '>=',
+        '<=',
+        '==',
+        '!=',
+        '+',
+        '-',
+        '*',
+        '/',
+        '%',
+        '&&',
+        '||',
+        '!',
+        '<',
+        '>',
+        '?',
+        '...',
+        ':'
     ],
-    // we include these common regular expressions
     symbols: /[=><!~?:&|+\-*\/\^%]+/,
     escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-    digits: /\d+(_+\d+)*/,
-    octaldigits: /[0-7]+(_+[0-7]+)*/,
-    binarydigits: /[0-1]+(_+[0-1]+)*/,
-    hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
-    // The main tokenizer for our languages
+    terraformFunctions: /(abs|ceil|floor|log|max|min|pow|signum|chomp|format|formatlist|indent|join|lower|regex|regexall|replace|split|strrev|substr|title|trimspace|upper|chunklist|coalesce|coalescelist|compact|concat|contains|distinct|element|flatten|index|keys|length|list|lookup|map|matchkeys|merge|range|reverse|setintersection|setproduct|setunion|slice|sort|transpose|values|zipmap|base64decode|base64encode|base64gzip|csvdecode|jsondecode|jsonencode|urlencode|yamldecode|yamlencode|abspath|dirname|pathexpand|basename|file|fileexists|fileset|filebase64|templatefile|formatdate|timeadd|timestamp|base64sha256|base64sha512|bcrypt|filebase64sha256|filebase64sha512|filemd5|filemd1|filesha256|filesha512|md5|rsadecrypt|sha1|sha256|sha512|uuid|uuidv5|cidrhost|cidrnetmask|cidrsubnet|tobool|tolist|tomap|tonumber|toset|tostring)/,
+    terraformMainBlocks: /(module|data|terraform|resource|provider|variable|output|locals)/,
     tokenizer: {
         root: [
-            // identifiers and keywords
-            [/[a-zA-Z_$][\w$]*/, {
+            // highlight main blocks
+            [
+                /^@terraformMainBlocks([ \t]*)([\w-]+|"[\w-]+"|)([ \t]*)([\w-]+|"[\w-]+"|)([ \t]*)(\{)/,
+                ['type', '', 'string', '', 'string', '', '@brackets']
+            ],
+            // highlight all the remaining blocks
+            [
+                /(\w+[ \t]+)([ \t]*)([\w-]+|"[\w-]+"|)([ \t]*)([\w-]+|"[\w-]+"|)([ \t]*)(\{)/,
+                ['identifier', '', 'string', '', 'string', '', '@brackets']
+            ],
+            // highlight block
+            [
+                /(\w+[ \t]+)([ \t]*)([\w-]+|"[\w-]+"|)([ \t]*)([\w-]+|"[\w-]+"|)(=)(\{)/,
+                ['identifier', '', 'string', '', 'operator', '', '@brackets']
+            ],
+            // terraform general highlight - shared with expressions
+            { include: '@terraform' }
+        ],
+        terraform: [
+            // highlight terraform functions
+            [/@terraformFunctions(\()/, ['type', '@brackets']],
+            // all other words are variables or keywords
+            [
+                /[a-zA-Z_]\w*-*/,
+                {
                     cases: {
                         '@keywords': { token: 'keyword.$0' },
-                        '@default': 'identifier'
+                        '@default': 'variable'
                     }
-                }],
-            // whitespace
+                }
+            ],
             { include: '@whitespace' },
+            { include: '@heredoc' },
             // delimiters and operators
             [/[{}()\[\]]/, '@brackets'],
             [/[<>](?!@symbols)/, '@brackets'],
-            [/@symbols/, {
+            [
+                /@symbols/,
+                {
                     cases: {
-                        '@operators': 'delimiter',
+                        '@operators': 'operator',
                         '@default': ''
                     }
-                }],
-            // @ annotations.
-            [/@\s*[a-zA-Z_\$][\w\$]*/, 'annotation'],
+                }
+            ],
             // numbers
-            [/(@digits)[eE]([\-+]?(@digits))?[fFdD]?/, 'number.float'],
-            [/(@digits)\.(@digits)([eE][\-+]?(@digits))?[fFdD]?/, 'number.float'],
-            [/0[xX](@hexdigits)[Ll]?/, 'number.hex'],
-            [/0(@octaldigits)[Ll]?/, 'number.octal'],
-            [/0[bB](@binarydigits)[Ll]?/, 'number.binary'],
-            [/(@digits)[fFdD]/, 'number.float'],
-            [/(@digits)[lL]?/, 'number'],
-            // delimiter: after number because of .\d floats
+            [/\d*\d+[eE]([\-+]?\d+)?/, 'number.float'],
+            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+            [/\d[\d']*/, 'number'],
+            [/\d/, 'number'],
             [/[;,.]/, 'delimiter'],
             // strings
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],
             [/"/, 'string', '@string'],
-            // characters
-            [/'[^\\']'/, 'string'],
-            [/(')(@escapes)(')/, ['string', 'string.escape', 'string']],
-            [/'/, 'string.invalid']
+            [/'/, 'invalid']
+        ],
+        heredoc: [
+            [
+                /<<[-]*\s*["]?([\w\-]+)["]?/,
+                { token: 'string.heredoc.delimiter', next: '@heredocBody.$1' }
+            ]
+        ],
+        heredocBody: [
+            [
+                /^([\w\-]+)$/,
+                {
+                    cases: {
+                        '$1==$S2': [
+                            {
+                                token: 'string.heredoc.delimiter',
+                                next: '@popall'
+                            }
+                        ],
+                        '@default': 'string.heredoc'
+                    }
+                }
+            ],
+            [/./, 'string.heredoc']
         ],
         whitespace: [
             [/[ \t\r\n]+/, ''],
-            [/\/\*\*(?!\/)/, 'comment.doc', '@javadoc'],
             [/\/\*/, 'comment', '@comment'],
             [/\/\/.*$/, 'comment'],
+            [/#.*$/, 'comment']
         ],
         comment: [
             [/[^\/*]+/, 'comment'],
-            // [/\/\*/, 'comment', '@push' ],    // nested comment not allowed :-(
-            // [/\/\*/,    'comment.invalid' ],    // this breaks block comments in the shape of /* //*/
             [/\*\//, 'comment', '@pop'],
             [/[\/*]/, 'comment']
         ],
-        //Identical copy of comment above, except for the addition of .doc
-        javadoc: [
-            [/[^\/*]+/, 'comment.doc'],
-            // [/\/\*/, 'comment.doc', '@push' ],    // nested comment not allowed :-(
-            [/\/\*/, 'comment.doc.invalid'],
-            [/\*\//, 'comment.doc', '@pop'],
-            [/[\/*]/, 'comment.doc']
-        ],
         string: [
+            [/\$\{/, { token: 'delimiter', next: '@stringExpression' }],
+            [/[^\\"\$]+/, 'string'],
+            [/@escapes/, 'string.escape'],
+            [/\\./, 'string.escape.invalid'],
+            [/"/, 'string', '@popall']
+        ],
+        stringInsideExpression: [
             [/[^\\"]+/, 'string'],
             [/@escapes/, 'string.escape'],
             [/\\./, 'string.escape.invalid'],
             [/"/, 'string', '@pop']
         ],
-    },
+        stringExpression: [
+            [/\}/, { token: 'delimiter', next: '@pop' }],
+            [/"/, 'string', '@stringInsideExpression'],
+            { include: '@terraform' }
+        ]
+    }
 };
 
 

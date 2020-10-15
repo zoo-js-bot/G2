@@ -1,10 +1,10 @@
 exports.ids = [44];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/redis/redis.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/redis/redis.js ***!
-  \**************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/powershell/powershell.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/powershell/powershell.js ***!
+  \************************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,8 +16,13 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
+    // the default separators except `$-`
+    wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\#%\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
+    comments: {
+        lineComment: '#',
+        blockComment: ['<#', '#>']
+    },
     brackets: [
         ['{', '}'],
         ['[', ']'],
@@ -27,109 +32,223 @@ var conf = {
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
-        { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: '"', close: '"', notIn: ['string'] },
+        { open: "'", close: "'", notIn: ['string', 'comment'] }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
-    ]
+        { open: "'", close: "'" }
+    ],
+    folding: {
+        markers: {
+            start: new RegExp('^\\s*#region\\b'),
+            end: new RegExp('^\\s*#endregion\\b')
+        }
+    }
 };
 var language = {
     defaultToken: '',
-    tokenPostfix: '.redis',
     ignoreCase: true,
+    tokenPostfix: '.ps1',
     brackets: [
-        { open: '[', close: ']', token: 'delimiter.square' },
-        { open: '(', close: ')', token: 'delimiter.parenthesis' }
+        { token: 'delimiter.curly', open: '{', close: '}' },
+        { token: 'delimiter.square', open: '[', close: ']' },
+        { token: 'delimiter.parenthesis', open: '(', close: ')' }
     ],
     keywords: [
-        "APPEND", "AUTH", "BGREWRITEAOF", "BGSAVE", "BITCOUNT", "BITFIELD", "BITOP", "BITPOS", "BLPOP", "BRPOP", "BRPOPLPUSH",
-        "CLIENT", "KILL", "LIST", "GETNAME", "PAUSE", "REPLY", "SETNAME", "CLUSTER", "ADDSLOTS", "COUNT-FAILURE-REPORTS",
-        "COUNTKEYSINSLOT", "DELSLOTS", "FAILOVER", "FORGET", "GETKEYSINSLOT", "INFO", "KEYSLOT", "MEET", "NODES", "REPLICATE",
-        "RESET", "SAVECONFIG", "SET-CONFIG-EPOCH", "SETSLOT", "SLAVES", "SLOTS", "COMMAND", "COUNT", "GETKEYS", "CONFIG", "GET",
-        "REWRITE", "SET", "RESETSTAT", "DBSIZE", "DEBUG", "OBJECT", "SEGFAULT", "DECR", "DECRBY", "DEL", "DISCARD", "DUMP", "ECHO",
-        "EVAL", "EVALSHA", "EXEC", "EXISTS", "EXPIRE", "EXPIREAT", "FLUSHALL", "FLUSHDB", "GEOADD", "GEOHASH", "GEOPOS", "GEODIST",
-        "GEORADIUS", "GEORADIUSBYMEMBER", "GETBIT", "GETRANGE", "GETSET", "HDEL", "HEXISTS", "HGET", "HGETALL", "HINCRBY", "HINCRBYFLOAT",
-        "HKEYS", "HLEN", "HMGET", "HMSET", "HSET", "HSETNX", "HSTRLEN", "HVALS", "INCR", "INCRBY", "INCRBYFLOAT", "KEYS", "LASTSAVE",
-        "LINDEX", "LINSERT", "LLEN", "LPOP", "LPUSH", "LPUSHX", "LRANGE", "LREM", "LSET", "LTRIM", "MGET", "MIGRATE", "MONITOR",
-        "MOVE", "MSET", "MSETNX", "MULTI", "PERSIST", "PEXPIRE", "PEXPIREAT", "PFADD", "PFCOUNT", "PFMERGE", "PING", "PSETEX",
-        "PSUBSCRIBE", "PUBSUB", "PTTL", "PUBLISH", "PUNSUBSCRIBE", "QUIT", "RANDOMKEY", "READONLY", "READWRITE", "RENAME", "RENAMENX",
-        "RESTORE", "ROLE", "RPOP", "RPOPLPUSH", "RPUSH", "RPUSHX", "SADD", "SAVE", "SCARD", "SCRIPT", "FLUSH", "LOAD", "SDIFF",
-        "SDIFFSTORE", "SELECT", "SETBIT", "SETEX", "SETNX", "SETRANGE", "SHUTDOWN", "SINTER", "SINTERSTORE", "SISMEMBER", "SLAVEOF",
-        "SLOWLOG", "SMEMBERS", "SMOVE", "SORT", "SPOP", "SRANDMEMBER", "SREM", "STRLEN", "SUBSCRIBE", "SUNION", "SUNIONSTORE", "SWAPDB",
-        "SYNC", "TIME", "TOUCH", "TTL", "TYPE", "UNSUBSCRIBE", "UNLINK", "UNWATCH", "WAIT", "WATCH", "ZADD", "ZCARD", "ZCOUNT", "ZINCRBY",
-        "ZINTERSTORE", "ZLEXCOUNT", "ZRANGE", "ZRANGEBYLEX", "ZREVRANGEBYLEX", "ZRANGEBYSCORE", "ZRANK", "ZREM", "ZREMRANGEBYLEX",
-        "ZREMRANGEBYRANK", "ZREMRANGEBYSCORE", "ZREVRANGE", "ZREVRANGEBYSCORE", "ZREVRANK", "ZSCORE", "ZUNIONSTORE", "SCAN", "SSCAN",
-        "HSCAN", "ZSCAN"
+        'begin',
+        'break',
+        'catch',
+        'class',
+        'continue',
+        'data',
+        'define',
+        'do',
+        'dynamicparam',
+        'else',
+        'elseif',
+        'end',
+        'exit',
+        'filter',
+        'finally',
+        'for',
+        'foreach',
+        'from',
+        'function',
+        'if',
+        'in',
+        'param',
+        'process',
+        'return',
+        'switch',
+        'throw',
+        'trap',
+        'try',
+        'until',
+        'using',
+        'var',
+        'while',
+        'workflow',
+        'parallel',
+        'sequence',
+        'inlinescript',
+        'configuration'
     ],
-    operators: [
-    // NOT SUPPORTED
-    ],
-    builtinFunctions: [
-    // NOT SUPPORTED
-    ],
-    builtinVariables: [
-    // NOT SUPPORTED
-    ],
-    pseudoColumns: [
-    // NOT SUPPORTED
-    ],
+    helpKeywords: /SYNOPSIS|DESCRIPTION|PARAMETER|EXAMPLE|INPUTS|OUTPUTS|NOTES|LINK|COMPONENT|ROLE|FUNCTIONALITY|FORWARDHELPTARGETNAME|FORWARDHELPCATEGORY|REMOTEHELPRUNSPACE|EXTERNALHELP/,
+    // we include these common regular expressions
+    symbols: /[=><!~?&%|+\-*\/\^;\.,]+/,
+    escapes: /`(?:[abfnrtv\\"'$]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+    // The main tokenizer for our languages
     tokenizer: {
         root: [
-            { include: '@whitespace' },
-            { include: '@pseudoColumns' },
-            { include: '@numbers' },
-            { include: '@strings' },
-            { include: '@scopes' },
+            // commands and keywords
+            [
+                /[a-zA-Z_][\w-]*/,
+                {
+                    cases: {
+                        '@keywords': { token: 'keyword.$0' },
+                        '@default': ''
+                    }
+                }
+            ],
+            // whitespace
+            [/[ \t\r\n]+/, ''],
+            // labels
+            [/^:\w*/, 'metatag'],
+            // variables
+            [
+                /\$(\{((global|local|private|script|using):)?[\w]+\}|((global|local|private|script|using):)?[\w]+)/,
+                'variable'
+            ],
+            // Comments
+            [/<#/, 'comment', '@comment'],
+            [/#.*$/, 'comment'],
+            // delimiters
+            [/[{}()\[\]]/, '@brackets'],
+            [/@symbols/, 'delimiter'],
+            // numbers
+            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+            [/0[xX][0-9a-fA-F_]*[0-9a-fA-F]/, 'number.hex'],
+            [/\d+?/, 'number'],
+            // delimiter: after number because of .\d floats
             [/[;,.]/, 'delimiter'],
-            [/[()]/, '@brackets'],
-            [/[\w@#$]+/, {
+            // strings:
+            [/\@"/, 'string', '@herestring."'],
+            [/\@'/, 'string', "@herestring.'"],
+            [
+                /"/,
+                {
                     cases: {
-                        '@keywords': 'keyword',
-                        '@operators': 'operator',
-                        '@builtinVariables': 'predefined',
-                        '@builtinFunctions': 'predefined',
-                        '@default': 'identifier'
+                        '@eos': 'string',
+                        '@default': { token: 'string', next: '@string."' }
                     }
-                }],
-            [/[<>=!%&+\-*/|~^]/, 'operator'],
-        ],
-        whitespace: [
-            [/\s+/, 'white']
-        ],
-        pseudoColumns: [
-            [/[$][A-Za-z_][\w@#$]*/, {
+                }
+            ],
+            [
+                /'/,
+                {
                     cases: {
-                        '@pseudoColumns': 'predefined',
-                        '@default': 'identifier'
+                        '@eos': 'string',
+                        '@default': { token: 'string', next: "@string.'" }
                     }
-                }],
-        ],
-        numbers: [
-            [/0[xX][0-9a-fA-F]*/, 'number'],
-            [/[$][+-]*\d*(\.\d*)?/, 'number'],
-            [/((\d+(\.\d*)?)|(\.\d+))([eE][\-+]?\d+)?/, 'number']
-        ],
-        strings: [
-            [/'/, { token: 'string', next: '@string' }],
-            [/"/, { token: 'string.double', next: '@stringDouble' }]
+                }
+            ]
         ],
         string: [
-            [/[^']+/, 'string'],
-            [/''/, 'string'],
-            [/'/, { token: 'string', next: '@pop' }],
+            [
+                /[^"'\$`]+/,
+                {
+                    cases: {
+                        '@eos': { token: 'string', next: '@popall' },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [
+                /@escapes/,
+                {
+                    cases: {
+                        '@eos': { token: 'string.escape', next: '@popall' },
+                        '@default': 'string.escape'
+                    }
+                }
+            ],
+            [
+                /`./,
+                {
+                    cases: {
+                        '@eos': {
+                            token: 'string.escape.invalid',
+                            next: '@popall'
+                        },
+                        '@default': 'string.escape.invalid'
+                    }
+                }
+            ],
+            [
+                /\$[\w]+$/,
+                {
+                    cases: {
+                        '$S2=="': { token: 'variable', next: '@popall' },
+                        '@default': { token: 'string', next: '@popall' }
+                    }
+                }
+            ],
+            [
+                /\$[\w]+/,
+                {
+                    cases: {
+                        '$S2=="': 'variable',
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [
+                /["']/,
+                {
+                    cases: {
+                        '$#==$S2': { token: 'string', next: '@pop' },
+                        '@default': {
+                            cases: {
+                                '@eos': { token: 'string', next: '@popall' },
+                                '@default': 'string'
+                            }
+                        }
+                    }
+                }
+            ]
         ],
-        stringDouble: [
-            [/[^"]+/, 'string.double'],
-            [/""/, 'string.double'],
-            [/"/, { token: 'string.double', next: '@pop' }]
+        herestring: [
+            [
+                /^\s*(["'])@/,
+                {
+                    cases: {
+                        '$1==$S2': { token: 'string', next: '@pop' },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [/[^\$`]+/, 'string'],
+            [/@escapes/, 'string.escape'],
+            [/`./, 'string.escape.invalid'],
+            [
+                /\$[\w]+/,
+                {
+                    cases: {
+                        '$S2=="': 'variable',
+                        '@default': 'string'
+                    }
+                }
+            ]
         ],
-        scopes: [
-        // NOT SUPPORTED
+        comment: [
+            [/[^#\.]+/, 'comment'],
+            [/#>/, 'comment', '@pop'],
+            [/(\.)(@helpKeywords)(?!\w)/, { token: 'comment.keyword.$2' }],
+            [/[\.#]/, 'comment']
         ]
     }
 };

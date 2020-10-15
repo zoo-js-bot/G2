@@ -1,10 +1,10 @@
 exports.ids = [33];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/pascaligo/pascaligo.js":
-/*!**********************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/pascaligo/pascaligo.js ***!
-  \**********************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/mips/mips.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/mips/mips.js ***!
+  \************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,112 +16,200 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
+    wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\#%\^\&\*\(\)\=\$\-\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
     comments: {
-        lineComment: '//',
-        blockComment: ['(*', '*)'],
+        blockComment: ['###', '###'],
+        lineComment: '#'
     },
-    brackets: [
-        ['{', '}'],
-        ['[', ']'],
-        ['(', ')'],
-        ['<', '>'],
-    ],
-    autoClosingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
-        { open: '<', close: '>' },
-        { open: '\'', close: '\'' },
-    ],
-    surroundingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
-        { open: '<', close: '>' },
-        { open: '\'', close: '\'' },
-    ]
+    folding: {
+        markers: {
+            start: new RegExp('^\\s*#region\\b'),
+            end: new RegExp('^\\s*#endregion\\b')
+        }
+    }
 };
 var language = {
     defaultToken: '',
-    tokenPostfix: '.pascaligo',
-    ignoreCase: true,
-    brackets: [
-        { open: '{', close: '}', token: 'delimiter.curly' },
-        { open: '[', close: ']', token: 'delimiter.square' },
-        { open: '(', close: ')', token: 'delimiter.parenthesis' },
-        { open: '<', close: '>', token: 'delimiter.angle' }
-    ],
+    ignoreCase: false,
+    tokenPostfix: '.mips',
+    regEx: /\/(?!\/\/)(?:[^\/\\]|\\.)*\/[igm]*/,
     keywords: [
-        'begin', 'block', 'case', 'const', 'else', 'end',
-        'fail', 'for', 'from', 'function', 'if', 'is', 'nil',
-        'of', 'remove', 'return', 'skip', 'then', 'type', 'var',
-        'while', 'with', 'option', 'None', 'transaction'
-    ],
-    typeKeywords: [
-        'bool', 'int', 'list', 'map', 'nat', 'record',
-        'string', 'unit', 'address', 'map', 'mtz', 'xtz'
-    ],
-    operators: [
-        '=', '>', '<', '<=', '>=', '<>', ':', ':=', 'and', 'mod', 'or',
-        '+', '-', '*', '/', '@', '&', '^', '%'
+        '.data',
+        '.text',
+        'syscall',
+        'trap',
+        'add',
+        'addu',
+        'addi',
+        'addiu',
+        'and',
+        'andi',
+        'div',
+        'divu',
+        'mult',
+        'multu',
+        'nor',
+        'or',
+        'ori',
+        'sll',
+        'slv',
+        'sra',
+        'srav',
+        'srl',
+        'srlv',
+        'sub',
+        'subu',
+        'xor',
+        'xori',
+        'lhi',
+        'lho',
+        'lhi',
+        'llo',
+        'slt',
+        'slti',
+        'sltu',
+        'sltiu',
+        'beq',
+        'bgtz',
+        'blez',
+        'bne',
+        'j',
+        'jal',
+        'jalr',
+        'jr',
+        'lb',
+        'lbu',
+        'lh',
+        'lhu',
+        'lw',
+        'li',
+        'la',
+        'sb',
+        'sh',
+        'sw',
+        'mfhi',
+        'mflo',
+        'mthi',
+        'mtlo',
+        'move'
     ],
     // we include these common regular expressions
-    symbols: /[=><:@\^&|+\-*\/\^%]+/,
+    symbols: /[\.,\:]+/,
+    escapes: /\\(?:[abfnrtv\\"'$]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     // The main tokenizer for our languages
     tokenizer: {
         root: [
             // identifiers and keywords
-            [/[a-zA-Z_][\w]*/, {
+            [/\$[a-zA-Z_]\w*/, 'variable.predefined'],
+            [
+                /[.a-zA-Z_]\w*/,
+                {
                     cases: {
+                        this: 'variable.predefined',
                         '@keywords': { token: 'keyword.$0' },
-                        '@default': 'identifier'
-                    }
-                }],
-            // whitespace
-            { include: '@whitespace' },
-            // delimiters and operators
-            [/[{}()\[\]]/, '@brackets'],
-            [/[<>](?!@symbols)/, '@brackets'],
-            [/@symbols/, {
-                    cases: {
-                        '@operators': 'delimiter',
                         '@default': ''
                     }
-                }],
+                }
+            ],
+            // whitespace
+            [/[ \t\r\n]+/, ''],
+            // Comments
+            [/#.*$/, 'comment'],
+            // regular expressions
+            ['///', { token: 'regexp', next: '@hereregexp' }],
+            [/^(\s*)(@regEx)/, ['', 'regexp']],
+            [/(\,)(\s*)(@regEx)/, ['delimiter', '', 'regexp']],
+            [/(\:)(\s*)(@regEx)/, ['delimiter', '', 'regexp']],
+            // delimiters
+            [/@symbols/, 'delimiter'],
             // numbers
-            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
-            [/\$[0-9a-fA-F]{1,16}/, 'number.hex'],
+            [/\d+[eE]([\-+]?\d+)?/, 'number.float'],
+            [/\d+\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+            [/0[xX][0-9a-fA-F]+/, 'number.hex'],
+            [/0[0-7]+(?!\d)/, 'number.octal'],
             [/\d+/, 'number'],
             // delimiter: after number because of .\d floats
-            [/[;,.]/, 'delimiter'],
-            // strings
-            [/'([^'\\]|\\.)*$/, 'string.invalid'],
-            [/'/, 'string', '@string'],
-            // characters
-            [/'[^\\']'/, 'string'],
-            [/'/, 'string.invalid'],
-            [/\#\d+/, 'string']
-        ],
-        /* */
-        comment: [
-            [/[^\(\*]+/, 'comment'],
-            //[/\(\*/,    'comment', '@push' ],    // nested comment  not allowed :-(
-            [/\*\)/, 'comment', '@pop'],
-            [/\(\*/, 'comment']
+            [/[,.]/, 'delimiter'],
+            // strings:
+            [/"""/, 'string', '@herestring."""'],
+            [/'''/, 'string', "@herestring.'''"],
+            [
+                /"/,
+                {
+                    cases: {
+                        '@eos': 'string',
+                        '@default': { token: 'string', next: '@string."' }
+                    }
+                }
+            ],
+            [
+                /'/,
+                {
+                    cases: {
+                        '@eos': 'string',
+                        '@default': { token: 'string', next: "@string.'" }
+                    }
+                }
+            ]
         ],
         string: [
-            [/[^\\']+/, 'string'],
-            [/\\./, 'string.escape.invalid'],
-            [/'/, { token: 'string.quote', bracket: '@close', next: '@pop' }]
+            [/[^"'\#\\]+/, 'string'],
+            [/@escapes/, 'string.escape'],
+            [/\./, 'string.escape.invalid'],
+            [/\./, 'string.escape.invalid'],
+            [
+                /#{/,
+                {
+                    cases: {
+                        '$S2=="': {
+                            token: 'string',
+                            next: 'root.interpolatedstring'
+                        },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [
+                /["']/,
+                {
+                    cases: {
+                        '$#==$S2': { token: 'string', next: '@pop' },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [/#/, 'string']
         ],
-        whitespace: [
-            [/[ \t\r\n]+/, 'white'],
-            [/\(\*/, 'comment', '@comment'],
-            [/\/\/.*$/, 'comment'],
+        herestring: [
+            [
+                /("""|''')/,
+                {
+                    cases: {
+                        '$1==$S2': { token: 'string', next: '@pop' },
+                        '@default': 'string'
+                    }
+                }
+            ],
+            [/[^#\\'"]+/, 'string'],
+            [/['"]+/, 'string'],
+            [/@escapes/, 'string.escape'],
+            [/\./, 'string.escape.invalid'],
+            [/#{/, { token: 'string.quote', next: 'root.interpolatedstring' }],
+            [/#/, 'string']
         ],
-    },
+        comment: [
+            [/[^#]+/, 'comment'],
+            [/#/, 'comment']
+        ],
+        hereregexp: [
+            [/[^\\\/#]+/, 'regexp'],
+            [/\\./, 'regexp'],
+            [/#.*$/, 'comment'],
+            ['///[igm]*', { token: 'regexp', next: '@pop' }],
+            [/\//, 'regexp']
+        ]
+    }
 };
 
 

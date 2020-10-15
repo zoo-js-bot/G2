@@ -1,10 +1,10 @@
 exports.ids = [58];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/tcl/tcl.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/tcl/tcl.js ***!
-  \**********************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/shell/shell.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/shell/shell.js ***!
+  \**************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16,8 +16,10 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
+    comments: {
+        lineComment: '#'
+    },
     brackets: [
         ['{', '}'],
         ['[', ']'],
@@ -28,118 +30,204 @@ var conf = {
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: "'", close: "'" },
+        { open: '`', close: '`' }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: "'", close: "'" },
+        { open: '`', close: '`' }
     ]
 };
 var language = {
-    tokenPostfix: '.tcl',
-    specialFunctions: [
-        'set', 'unset', 'rename', 'variable', 'proc', 'coroutine',
-        'foreach',
-        'incr', 'append',
-        'lappend', 'linsert', 'lreplace'
-    ],
-    mainFunctions: [
-        'if', 'then', 'elseif', 'else', 'case', 'switch', 'while', 'for',
-        'break', 'continue', 'return',
-        'package', 'namespace',
-        'catch', 'exit',
-        'eval', 'expr', 'uplevel', 'upvar'
-    ],
-    builtinFunctions: [
-        'file', 'info', 'concat', 'join', 'lindex',
-        'list', 'llength', 'lrange', 'lsearch', 'lsort', 'split',
-        'array', 'parray', 'binary', 'format', 'regexp', 'regsub', 'scan', 'string',
-        'subst', 'dict', 'cd', 'clock', 'exec', 'glob', 'pid', 'pwd', 'close', 'eof', 'fblocked',
-        'fconfigure', 'fcopy', 'fileevent', 'flush', 'gets', 'open', 'puts', 'read', 'seek',
-        'socket', 'tell', 'interp', 'after', 'auto_execok',
-        'auto_load', 'auto_mkindex', 'auto_reset', 'bgerror', 'error',
-        'global', 'history', 'load', 'source', 'time', 'trace',
-        'unknown', 'unset', 'update', 'vwait', 'winfo', 'wm', 'bind', 'event',
-        'pack', 'place', 'grid', 'font', 'bell', 'clipboard', 'destroy', 'focus', 'grab', 'lower',
-        'option', 'raise', 'selection', 'send', 'tk', 'tkwait', 'tk_bisque', 'tk_focusNext',
-        'tk_focusPrev', 'tk_focusFollowsMouse', 'tk_popup', 'tk_setPalette'
-    ],
-    symbols: /[=><!~?:&|+\-*\/\^%]+/,
+    defaultToken: '',
+    ignoreCase: true,
+    tokenPostfix: '.shell',
     brackets: [
-        { open: '(', close: ')', token: 'delimiter.parenthesis' },
-        { open: '{', close: '}', token: 'delimiter.curly' },
-        { open: '[', close: ']', token: 'delimiter.square' }
+        { token: 'delimiter.bracket', open: '{', close: '}' },
+        { token: 'delimiter.parenthesis', open: '(', close: ')' },
+        { token: 'delimiter.square', open: '[', close: ']' }
     ],
-    escapes: /\\(?:[abfnrtv\\"'\[\]\{\};\$]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-    variables: /(?:\$+(?:(?:\:\:?)?[a-zA-Z_]\w*)+)/,
+    keywords: [
+        'if',
+        'then',
+        'do',
+        'else',
+        'elif',
+        'while',
+        'until',
+        'for',
+        'in',
+        'esac',
+        'fi',
+        'fin',
+        'fil',
+        'done',
+        'exit',
+        'set',
+        'unset',
+        'export',
+        'function'
+    ],
+    builtins: [
+        'ab',
+        'awk',
+        'bash',
+        'beep',
+        'cat',
+        'cc',
+        'cd',
+        'chown',
+        'chmod',
+        'chroot',
+        'clear',
+        'cp',
+        'curl',
+        'cut',
+        'diff',
+        'echo',
+        'find',
+        'gawk',
+        'gcc',
+        'get',
+        'git',
+        'grep',
+        'hg',
+        'kill',
+        'killall',
+        'ln',
+        'ls',
+        'make',
+        'mkdir',
+        'openssl',
+        'mv',
+        'nc',
+        'node',
+        'npm',
+        'ping',
+        'ps',
+        'restart',
+        'rm',
+        'rmdir',
+        'sed',
+        'service',
+        'sh',
+        'shopt',
+        'shred',
+        'source',
+        'sort',
+        'sleep',
+        'ssh',
+        'start',
+        'stop',
+        'su',
+        'sudo',
+        'svn',
+        'tee',
+        'telnet',
+        'top',
+        'touch',
+        'vi',
+        'vim',
+        'wall',
+        'wc',
+        'wget',
+        'who',
+        'write',
+        'yes',
+        'zsh'
+    ],
+    // we include these common regular expressions
+    symbols: /[=><!~?&|+\-*\/\^;\.,]+/,
+    // The main tokenizer for our languages
     tokenizer: {
         root: [
-            // identifiers and keywords
-            [/[a-zA-Z_]\w*/, { cases: {
-                        '@specialFunctions': { token: 'keyword.flow', next: '@specialFunc' },
-                        '@mainFunctions': 'keyword',
-                        '@builtinFunctions': 'variable',
-                        '@default': 'operator.scss'
-                    } }],
-            [/\s+\-+(?!\d|\.)\w*|{\*}/, 'metatag'],
-            // whitespace
             { include: '@whitespace' },
-            // delimiters and operators
-            [/[{}()\[\]]/, '@brackets'],
-            [/@symbols/, 'operator'],
-            [/\$+(?:\:\:)?\{/, { token: 'identifier', next: '@nestedVariable' }],
-            [/@variables/, 'type.identifier'],
-            [/\.(?!\d|\.)[\w\-]*/, 'operator.sql'],
-            // numbers
-            [/\d+(\.\d+)?/, 'number'],
-            [/\d+/, 'number'],
-            // delimiter
-            [/;/, 'delimiter'],
-            // strings
-            [/"/, { token: 'string.quote', bracket: '@open', next: '@dstring' }],
-            [/'/, { token: 'string.quote', bracket: '@open', next: '@sstring' }]
-        ],
-        dstring: [
-            [/\[/, { token: '@brackets', next: '@nestedCall' }],
-            [/\$+(?:\:\:)?\{/, { token: 'identifier', next: '@nestedVariable' }],
-            [/@variables/, 'type.identifier'],
-            [/[^\\$\[\]"]+/, 'string'],
-            [/@escapes/, 'string.escape'],
-            [/"/, { token: 'string.quote', bracket: '@close', next: '@pop' }],
-        ],
-        sstring: [
-            [/\[/, { token: '@brackets', next: '@nestedCall' }],
-            [/\$+(?:\:\:)?\{/, { token: 'identifier', next: '@nestedVariable' }],
-            [/@variables/, 'type.identifier'],
-            [/[^\\$\[\]']+/, 'string'],
-            [/@escapes/, 'string.escape'],
-            [/'/, { token: 'string.quote', bracket: '@close', next: '@pop' }]
+            [
+                /[a-zA-Z]\w*/,
+                {
+                    cases: {
+                        '@keywords': 'keyword',
+                        '@builtins': 'type.identifier',
+                        '@default': ''
+                    }
+                }
+            ],
+            { include: '@strings' },
+            { include: '@parameters' },
+            { include: '@heredoc' },
+            [/[{}\[\]()]/, '@brackets'],
+            [/-+\w+/, 'attribute.name'],
+            [/@symbols/, 'delimiter'],
+            { include: '@numbers' },
+            [/[,;]/, 'delimiter']
         ],
         whitespace: [
-            [/[ \t\r\n]+/, 'white'],
-            [/#.*\\$/, { token: 'comment', next: '@newlineComment' }],
-            [/#.*(?!\\)$/, 'comment']
+            [/\s+/, 'white'],
+            [/(^#!.*$)/, 'metatag'],
+            [/(^#.*$)/, 'comment']
         ],
-        newlineComment: [
-            [/.*\\$/, 'comment'],
-            [/.*(?!\\)$/, { token: 'comment', next: '@pop' }]
+        numbers: [
+            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+            [/0[xX][0-9a-fA-F_]*[0-9a-fA-F]/, 'number.hex'],
+            [/\d+/, 'number']
         ],
-        nestedVariable: [
-            [/[^\{\}\$]+/, 'type.identifier'],
-            [/\}/, { token: 'identifier', next: '@pop' }]
+        // Recognize strings, including those broken across lines
+        strings: [
+            [/'/, 'string', '@stringBody'],
+            [/"/, 'string', '@dblStringBody']
         ],
-        nestedCall: [
-            [/\[/, { token: '@brackets', next: '@nestedCall' }],
-            [/\]/, { token: '@brackets', next: '@pop' }],
-            { include: 'root' }
+        stringBody: [
+            [/'/, 'string', '@popall'],
+            [/./, 'string']
         ],
-        specialFunc: [
-            [/"/, { token: 'string', next: '@dstring' }],
-            [/'/, { token: 'string', next: '@sstring' }],
-            [/\S+/, { token: 'type', next: '@pop' }],
+        dblStringBody: [
+            [/"/, 'string', '@popall'],
+            [/./, 'string']
+        ],
+        heredoc: [
+            [
+                /(<<[-<]?)(\s*)(['"`]?)([\w\-]+)(['"`]?)/,
+                [
+                    'constants',
+                    'white',
+                    'string.heredoc.delimiter',
+                    'string.heredoc',
+                    'string.heredoc.delimiter'
+                ]
+            ]
+        ],
+        parameters: [
+            [/\$\d+/, 'variable.predefined'],
+            [/\$\w+/, 'variable'],
+            [/\$[*@#?\-$!0_]/, 'variable'],
+            [/\$'/, 'variable', '@parameterBodyQuote'],
+            [/\$"/, 'variable', '@parameterBodyDoubleQuote'],
+            [/\$\(/, 'variable', '@parameterBodyParen'],
+            [/\$\{/, 'variable', '@parameterBodyCurlyBrace']
+        ],
+        parameterBodyQuote: [
+            [/[^#:%*@\-!_']+/, 'variable'],
+            [/[#:%*@\-!_]/, 'delimiter'],
+            [/[']/, 'variable', '@pop']
+        ],
+        parameterBodyDoubleQuote: [
+            [/[^#:%*@\-!_"]+/, 'variable'],
+            [/[#:%*@\-!_]/, 'delimiter'],
+            [/["]/, 'variable', '@pop']
+        ],
+        parameterBodyParen: [
+            [/[^#:%*@\-!_)]+/, 'variable'],
+            [/[#:%*@\-!_]/, 'delimiter'],
+            [/[)]/, 'variable', '@pop']
+        ],
+        parameterBodyCurlyBrace: [
+            [/[^#:%*@\-!_}]+/, 'variable'],
+            [/[#:%*@\-!_]/, 'delimiter'],
+            [/[}]/, 'variable', '@pop']
         ]
     }
 };

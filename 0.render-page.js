@@ -16,11 +16,10 @@ __webpack_require__.r(__webpack_exports__);
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
     comments: {
         lineComment: '//',
-        blockComment: ['/*', '*/'],
+        blockComment: ['/*', '*/']
     },
     brackets: [
         ['{', '}'],
@@ -31,20 +30,20 @@ var conf = {
         { open: '[', close: ']' },
         { open: '{', close: '}' },
         { open: '(', close: ')' },
-        { open: '\'', close: '\'', notIn: ['string', 'comment'] },
-        { open: '"', close: '"', notIn: ['string'] },
+        { open: "'", close: "'", notIn: ['string', 'comment'] },
+        { open: '"', close: '"', notIn: ['string'] }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
+        { open: "'", close: "'" }
     ],
     folding: {
         markers: {
-            start: new RegExp("^\\s*#pragma\\s+region\\b"),
-            end: new RegExp("^\\s*#pragma\\s+endregion\\b")
+            start: new RegExp('^\\s*#pragma\\s+region\\b'),
+            end: new RegExp('^\\s*#pragma\\s+endregion\\b')
         }
     }
 };
@@ -237,11 +236,43 @@ var language = {
         '__wchar_t'
     ],
     operators: [
-        '=', '>', '<', '!', '~', '?', ':',
-        '==', '<=', '>=', '!=', '&&', '||', '++', '--',
-        '+', '-', '*', '/', '&', '|', '^', '%', '<<',
-        '>>', '>>>', '+=', '-=', '*=', '/=', '&=', '|=',
-        '^=', '%=', '<<=', '>>=', '>>>='
+        '=',
+        '>',
+        '<',
+        '!',
+        '~',
+        '?',
+        ':',
+        '==',
+        '<=',
+        '>=',
+        '!=',
+        '&&',
+        '||',
+        '++',
+        '--',
+        '+',
+        '-',
+        '*',
+        '/',
+        '&',
+        '|',
+        '^',
+        '%',
+        '<<',
+        '>>',
+        '>>>',
+        '+=',
+        '-=',
+        '*=',
+        '/=',
+        '&=',
+        '|=',
+        '^=',
+        '%=',
+        '<<=',
+        '>>=',
+        '>>>='
     ],
     // we include these common regular expressions
     symbols: /[=><!~?:&|+\-*\/\^%]+/,
@@ -255,12 +286,15 @@ var language = {
             // C++ 11 Raw String
             [/@encoding?R\"(?:([^ ()\\\t]*))\(/, { token: 'string.raw.begin', next: '@raw.$1' }],
             // identifiers and keywords
-            [/[a-zA-Z_]\w*/, {
+            [
+                /[a-zA-Z_]\w*/,
+                {
                     cases: {
                         '@keywords': { token: 'keyword.$0' },
                         '@default': 'identifier'
                     }
-                }],
+                }
+            ],
             // whitespace
             { include: '@whitespace' },
             // [[ attributes ]].
@@ -271,12 +305,15 @@ var language = {
             // delimiters and operators
             [/[{}()\[\]]/, '@brackets'],
             [/[<>](?!@symbols)/, '@brackets'],
-            [/@symbols/, {
+            [
+                /@symbols/,
+                {
                     cases: {
                         '@operators': 'delimiter',
                         '@default': ''
                     }
-                }],
+                }
+            ],
             // numbers
             [/\d*\d+[eE]([\-+]?\d+)?(@floatsuffix)/, 'number.float'],
             [/\d*\.\d+([eE][\-+]?\d+)?(@floatsuffix)/, 'number.float'],
@@ -299,7 +336,7 @@ var language = {
             [/[ \t\r\n]+/, ''],
             [/\/\*\*(?!\/)/, 'comment.doc', '@doccomment'],
             [/\/\*/, 'comment', '@comment'],
-            [/\/\/.*$/, 'comment'],
+            [/\/\/.*$/, 'comment']
         ],
         comment: [
             [/[^\/*]+/, 'comment'],
@@ -319,9 +356,16 @@ var language = {
             [/"/, 'string', '@pop']
         ],
         raw: [
-            [/(.*)(\))(?:([^ ()\\\t]*))(\")/, {
+            [
+                /(.*)(\))(?:([^ ()\\\t"]*))(\")/,
+                {
                     cases: {
-                        '$3==$S2': ['string.raw', 'string.raw.end', 'string.raw.end', { token: 'string.raw.end', next: '@pop' }],
+                        '$3==$S2': [
+                            'string.raw',
+                            'string.raw.end',
+                            'string.raw.end',
+                            { token: 'string.raw.end', next: '@pop' }
+                        ],
                         '@default': ['string.raw', 'string.raw', 'string.raw', 'string.raw']
                     }
                 }
@@ -329,10 +373,26 @@ var language = {
             [/.*/, 'string.raw']
         ],
         include: [
-            [/(\s*)(<)([^<>]*)(>)/, ['', 'keyword.directive.include.begin', 'string.include.identifier', { token: 'keyword.directive.include.end', next: '@pop' }]],
-            [/(\s*)(")([^"]*)(")/, ['', 'keyword.directive.include.begin', 'string.include.identifier', { token: 'keyword.directive.include.end', next: '@pop' }]]
+            [
+                /(\s*)(<)([^<>]*)(>)/,
+                [
+                    '',
+                    'keyword.directive.include.begin',
+                    'string.include.identifier',
+                    { token: 'keyword.directive.include.end', next: '@pop' }
+                ]
+            ],
+            [
+                /(\s*)(")([^"]*)(")/,
+                [
+                    '',
+                    'keyword.directive.include.begin',
+                    'string.include.identifier',
+                    { token: 'keyword.directive.include.end', next: '@pop' }
+                ]
+            ]
         ]
-    },
+    }
 };
 
 

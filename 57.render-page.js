@@ -1,10 +1,10 @@
 exports.ids = [57];
 exports.modules = {
 
-/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/swift/swift.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/swift/swift.js ***!
-  \**************************************************************************/
+/***/ "./node_modules/monaco-editor/esm/vs/basic-languages/scss/scss.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/basic-languages/scss/scss.js ***!
+  \************************************************************************/
 /*! exports provided: conf, language */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12,14 +12,15 @@ exports.modules = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "conf", function() { return conf; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "language", function() { return language; });
-/*!---------------------------------------------------------------------------------------------
- *  Copyright (C) David Owens II, owensd.io. All rights reserved.
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
 var conf = {
+    wordPattern: /(#?-?\d*\.\d\w*%?)|([@$#!.:]?[\w-?]+%?)|[@#!.]/g,
     comments: {
-        lineComment: '//',
         blockComment: ['/*', '*/'],
+        lineComment: '//'
     },
     brackets: [
         ['{', '}'],
@@ -27,147 +28,231 @@ var conf = {
         ['(', ')']
     ],
     autoClosingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
-        { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
-        { open: '`', close: '`' },
+        { open: '{', close: '}', notIn: ['string', 'comment'] },
+        { open: '[', close: ']', notIn: ['string', 'comment'] },
+        { open: '(', close: ')', notIn: ['string', 'comment'] },
+        { open: '"', close: '"', notIn: ['string', 'comment'] },
+        { open: "'", close: "'", notIn: ['string', 'comment'] }
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
-        { open: '`', close: '`' },
-    ]
+        { open: "'", close: "'" }
+    ],
+    folding: {
+        markers: {
+            start: new RegExp('^\\s*\\/\\*\\s*#region\\b\\s*(.*?)\\s*\\*\\/'),
+            end: new RegExp('^\\s*\\/\\*\\s*#endregion\\b.*\\*\\/')
+        }
+    }
 };
 var language = {
     defaultToken: '',
-    tokenPostfix: '.swift',
-    // TODO(owensd): Support the full range of unicode valid identifiers.
-    identifier: /[a-zA-Z_][\w$]*/,
-    // TODO(owensd): Support the @availability macro properly.
-    attributes: [
-        '@autoclosure', '@noescape', '@noreturn', '@NSApplicationMain', '@NSCopying', '@NSManaged',
-        '@objc', '@UIApplicationMain', '@noreturn', '@availability', '@IBAction', '@IBDesignable', '@IBInspectable', '@IBOutlet'
+    tokenPostfix: '.scss',
+    ws: '[ \t\n\r\f]*',
+    identifier: '-?-?([a-zA-Z]|(\\\\(([0-9a-fA-F]{1,6}\\s?)|[^[0-9a-fA-F])))([\\w\\-]|(\\\\(([0-9a-fA-F]{1,6}\\s?)|[^[0-9a-fA-F])))*',
+    brackets: [
+        { open: '{', close: '}', token: 'delimiter.curly' },
+        { open: '[', close: ']', token: 'delimiter.bracket' },
+        { open: '(', close: ')', token: 'delimiter.parenthesis' },
+        { open: '<', close: '>', token: 'delimiter.angle' }
     ],
-    accessmodifiers: ['public', 'private', 'internal'],
-    keywords: [
-        '__COLUMN__', '__FILE__', '__FUNCTION__', '__LINE__', 'as', 'as!', 'as?', 'associativity', 'break', 'case', 'catch',
-        'class', 'continue', 'convenience', 'default', 'deinit', 'didSet', 'do', 'dynamic', 'dynamicType',
-        'else', 'enum', 'extension', 'fallthrough', 'final', 'for', 'func', 'get', 'guard', 'if', 'import', 'in', 'infix',
-        'init', 'inout', 'internal', 'is', 'lazy', 'left', 'let', 'mutating', 'nil', 'none', 'nonmutating', 'operator',
-        'optional', 'override', 'postfix', 'precedence', 'prefix', 'private', 'protocol', 'Protocol', 'public',
-        'repeat', 'required', 'return', 'right', 'self', 'Self', 'set', 'static', 'struct', 'subscript', 'super', 'switch',
-        'throw', 'throws', 'try', 'try!', 'Type', 'typealias', 'unowned', 'var', 'weak', 'where', 'while', 'willSet', 'FALSE', 'TRUE'
-    ],
-    symbols: /[=(){}\[\].,:;@#\_&\-<>`?!+*\\\/]/,
-    // Moved . to operatorstart so it can be a delimiter
-    operatorstart: /[\/=\-+!*%<>&|^~?\u00A1-\u00A7\u00A9\u00AB\u00AC\u00AE\u00B0-\u00B1\u00B6\u00BB\u00BF\u00D7\u00F7\u2016-\u2017\u2020-\u2027\u2030-\u203E\u2041-\u2053\u2055-\u205E\u2190-\u23FF\u2500-\u2775\u2794-\u2BFF\u2E00-\u2E7F\u3001-\u3003\u3008-\u3030]/,
-    operatorend: /[\u0300-\u036F\u1DC0-\u1DFF\u20D0-\u20FF\uFE00-\uFE0F\uFE20-\uFE2F\uE0100-\uE01EF]/,
-    operators: /(@operatorstart)((@operatorstart)|(@operatorend))*/,
-    // TODO(owensd): These are borrowed from C#; need to validate correctness for Swift.
-    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     tokenizer: {
-        root: [
-            { include: '@whitespace' },
-            { include: '@comment' },
-            { include: '@attribute' },
-            { include: '@literal' },
-            { include: '@keyword' },
-            { include: '@invokedmethod' },
-            { include: '@symbol' },
+        root: [{ include: '@selector' }],
+        selector: [
+            { include: '@comments' },
+            { include: '@import' },
+            { include: '@variabledeclaration' },
+            { include: '@warndebug' },
+            ['[@](include)', { token: 'keyword', next: '@includedeclaration' }],
+            [
+                '[@](keyframes|-webkit-keyframes|-moz-keyframes|-o-keyframes)',
+                { token: 'keyword', next: '@keyframedeclaration' }
+            ],
+            ['[@](page|content|font-face|-moz-document)', { token: 'keyword' }],
+            ['[@](charset|namespace)', { token: 'keyword', next: '@declarationbody' }],
+            ['[@](function)', { token: 'keyword', next: '@functiondeclaration' }],
+            ['[@](mixin)', { token: 'keyword', next: '@mixindeclaration' }],
+            ['url(\\-prefix)?\\(', { token: 'meta', next: '@urldeclaration' }],
+            { include: '@controlstatement' },
+            { include: '@selectorname' },
+            ['[&\\*]', 'tag'],
+            ['[>\\+,]', 'delimiter'],
+            ['\\[', { token: 'delimiter.bracket', next: '@selectorattribute' }],
+            ['{', { token: 'delimiter.curly', next: '@selectorbody' }]
         ],
-        whitespace: [
-            [/\s+/, 'white'],
-            [/"""/, 'string.quote', '@endDblDocString']
+        selectorbody: [
+            ['[*_]?@identifier@ws:(?=(\\s|\\d|[^{;}]*[;}]))', 'attribute.name', '@rulevalue'],
+            { include: '@selector' },
+            ['[@](extend)', { token: 'keyword', next: '@extendbody' }],
+            ['[@](return)', { token: 'keyword', next: '@declarationbody' }],
+            ['}', { token: 'delimiter.curly', next: '@pop' }]
         ],
-        endDblDocString: [
-            [/[^"]+/, 'string'],
-            [/\\"/, 'string'],
-            [/"""/, 'string.quote', '@popall'],
-            [/"/, 'string']
+        selectorname: [
+            ['#{', { token: 'meta', next: '@variableinterpolation' }],
+            ['(\\.|#(?=[^{])|%|(@identifier)|:)+', 'tag'] // selector (.foo, div, ...)
         ],
-        symbol: [
-            [/[{}()\[\]]/, '@brackets'],
-            [/[<>](?!@symbols)/, '@brackets'],
-            [/[.]/, 'delimiter'],
-            [/@operators/, 'operator'],
-            [/@symbols/, 'operator']
+        selectorattribute: [
+            { include: '@term' },
+            [']', { token: 'delimiter.bracket', next: '@pop' }]
+        ],
+        term: [
+            { include: '@comments' },
+            ['url(\\-prefix)?\\(', { token: 'meta', next: '@urldeclaration' }],
+            { include: '@functioninvocation' },
+            { include: '@numbers' },
+            { include: '@strings' },
+            { include: '@variablereference' },
+            ['(and\\b|or\\b|not\\b)', 'operator'],
+            { include: '@name' },
+            ['([<>=\\+\\-\\*\\/\\^\\|\\~,])', 'operator'],
+            [',', 'delimiter'],
+            ['!default', 'literal'],
+            ['\\(', { token: 'delimiter.parenthesis', next: '@parenthizedterm' }]
+        ],
+        rulevalue: [
+            { include: '@term' },
+            ['!important', 'literal'],
+            [';', 'delimiter', '@pop'],
+            ['{', { token: 'delimiter.curly', switchTo: '@nestedproperty' }],
+            ['(?=})', { token: '', next: '@pop' }] // missing semicolon
+        ],
+        nestedproperty: [
+            ['[*_]?@identifier@ws:', 'attribute.name', '@rulevalue'],
+            { include: '@comments' },
+            ['}', { token: 'delimiter.curly', next: '@pop' }]
+        ],
+        warndebug: [['[@](warn|debug)', { token: 'keyword', next: '@declarationbody' }]],
+        import: [['[@](import)', { token: 'keyword', next: '@declarationbody' }]],
+        variabledeclaration: [
+            // sass variables
+            ['\\$@identifier@ws:', 'variable.decl', '@declarationbody']
+        ],
+        urldeclaration: [
+            { include: '@strings' },
+            ['[^)\r\n]+', 'string'],
+            ['\\)', { token: 'meta', next: '@pop' }]
+        ],
+        parenthizedterm: [
+            { include: '@term' },
+            ['\\)', { token: 'delimiter.parenthesis', next: '@pop' }]
+        ],
+        declarationbody: [
+            { include: '@term' },
+            [';', 'delimiter', '@pop'],
+            ['(?=})', { token: '', next: '@pop' }] // missing semicolon
+        ],
+        extendbody: [
+            { include: '@selectorname' },
+            ['!optional', 'literal'],
+            [';', 'delimiter', '@pop'],
+            ['(?=})', { token: '', next: '@pop' }] // missing semicolon
+        ],
+        variablereference: [
+            // sass variable reference
+            ['\\$@identifier', 'variable.ref'],
+            ['\\.\\.\\.', 'operator'],
+            ['#{', { token: 'meta', next: '@variableinterpolation' }] // sass var resolve
+        ],
+        variableinterpolation: [
+            { include: '@variablereference' },
+            ['}', { token: 'meta', next: '@pop' }]
+        ],
+        comments: [
+            ['\\/\\*', 'comment', '@comment'],
+            ['\\/\\/+.*', 'comment']
         ],
         comment: [
-            [/\/\/\/.*$/, 'comment.doc'],
-            [/\/\*\*/, 'comment.doc', '@commentdocbody'],
-            [/\/\/.*$/, 'comment'],
-            [/\/\*/, 'comment', '@commentbody']
+            ['\\*\\/', 'comment', '@pop'],
+            ['.', 'comment']
         ],
-        commentdocbody: [
-            [/\/\*/, 'comment', '@commentbody'],
-            [/\*\//, 'comment.doc', '@pop'],
-            [/\:[a-zA-Z]+\:/, 'comment.doc.param'],
-            [/./, 'comment.doc']
+        name: [['@identifier', 'attribute.value']],
+        numbers: [
+            ['(\\d*\\.)?\\d+([eE][\\-+]?\\d+)?', { token: 'number', next: '@units' }],
+            ['#[0-9a-fA-F_]+(?!\\w)', 'number.hex']
         ],
-        commentbody: [
-            [/\/\*/, 'comment', '@commentbody'],
-            [/\*\//, 'comment', '@pop'],
-            [/./, 'comment']
+        units: [
+            [
+                '(em|ex|ch|rem|vmin|vmax|vw|vh|vm|cm|mm|in|px|pt|pc|deg|grad|rad|turn|s|ms|Hz|kHz|%)?',
+                'number',
+                '@pop'
+            ]
         ],
-        attribute: [
-            [/\@@identifier/, {
-                    cases: {
-                        '@attributes': 'keyword.control',
-                        '@default': ''
-                    }
-                }]
+        functiondeclaration: [
+            ['@identifier@ws\\(', { token: 'meta', next: '@parameterdeclaration' }],
+            ['{', { token: 'delimiter.curly', switchTo: '@functionbody' }]
         ],
-        literal: [
-            [/"/, { token: 'string.quote', next: '@stringlit' }],
-            [/0[b]([01]_?)+/, 'number.binary'],
-            [/0[o]([0-7]_?)+/, 'number.octal'],
-            [/0[x]([0-9a-fA-F]_?)+([pP][\-+](\d_?)+)?/, 'number.hex'],
-            [/(\d_?)*\.(\d_?)+([eE][\-+]?(\d_?)+)?/, 'number.float'],
-            [/(\d_?)+/, 'number']
+        mixindeclaration: [
+            // mixin with parameters
+            ['@identifier@ws\\(', { token: 'meta', next: '@parameterdeclaration' }],
+            // mixin without parameters
+            ['@identifier', 'meta'],
+            ['{', { token: 'delimiter.curly', switchTo: '@selectorbody' }]
         ],
-        stringlit: [
-            [/\\\(/, { token: 'operator', next: '@interpolatedexpression' }],
-            [/@escapes/, 'string'],
-            [/\\./, 'string.escape.invalid'],
-            [/"/, { token: 'string.quote', next: '@pop' }],
-            [/./, 'string']
+        parameterdeclaration: [
+            ['\\$@identifier@ws:', 'variable.decl'],
+            ['\\.\\.\\.', 'operator'],
+            [',', 'delimiter'],
+            { include: '@term' },
+            ['\\)', { token: 'meta', next: '@pop' }]
         ],
-        interpolatedexpression: [
-            [/\(/, { token: 'operator', next: '@interpolatedexpression' }],
-            [/\)/, { token: 'operator', next: '@pop' }],
-            { include: '@literal' },
-            { include: '@keyword' },
-            { include: '@symbol' }
+        includedeclaration: [
+            { include: '@functioninvocation' },
+            ['@identifier', 'meta'],
+            [';', 'delimiter', '@pop'],
+            ['(?=})', { token: '', next: '@pop' }],
+            ['{', { token: 'delimiter.curly', switchTo: '@selectorbody' }]
         ],
-        keyword: [
-            [/`/, { token: 'operator', next: '@escapedkeyword' }],
-            [/@identifier/, {
-                    cases: {
-                        '@keywords': 'keyword', '[A-Z][\a-zA-Z0-9$]*': 'type.identifier',
-                        '@default': 'identifier'
-                    }
-                }]
+        keyframedeclaration: [
+            ['@identifier', 'meta'],
+            ['{', { token: 'delimiter.curly', switchTo: '@keyframebody' }]
         ],
-        escapedkeyword: [
-            [/`/, { token: 'operator', next: '@pop' }],
-            [/./, 'identifier']
+        keyframebody: [
+            { include: '@term' },
+            ['{', { token: 'delimiter.curly', next: '@selectorbody' }],
+            ['}', { token: 'delimiter.curly', next: '@pop' }]
         ],
-        //		symbol: [
-        //			[ /@symbols/, 'operator' ],
-        //			[ /@operators/, 'operator' ]
-        //		],
-        invokedmethod: [
-            [/([.])(@identifier)/, {
-                    cases: {
-                        '$2': ['delimeter', 'type.identifier'],
-                        '@default': ''
-                    }
-                }],
+        controlstatement: [
+            [
+                '[@](if|else|for|while|each|media)',
+                { token: 'keyword.flow', next: '@controlstatementdeclaration' }
+            ]
+        ],
+        controlstatementdeclaration: [
+            ['(in|from|through|if|to)\\b', { token: 'keyword.flow' }],
+            { include: '@term' },
+            ['{', { token: 'delimiter.curly', switchTo: '@selectorbody' }]
+        ],
+        functionbody: [
+            ['[@](return)', { token: 'keyword' }],
+            { include: '@variabledeclaration' },
+            { include: '@term' },
+            { include: '@controlstatement' },
+            [';', 'delimiter'],
+            ['}', { token: 'delimiter.curly', next: '@pop' }]
+        ],
+        functioninvocation: [['@identifier\\(', { token: 'meta', next: '@functionarguments' }]],
+        functionarguments: [
+            ['\\$@identifier@ws:', 'attribute.name'],
+            ['[,]', 'delimiter'],
+            { include: '@term' },
+            ['\\)', { token: 'meta', next: '@pop' }]
+        ],
+        strings: [
+            ['~?"', { token: 'string.delimiter', next: '@stringenddoublequote' }],
+            ["~?'", { token: 'string.delimiter', next: '@stringendquote' }]
+        ],
+        stringenddoublequote: [
+            ['\\\\.', 'string'],
+            ['"', { token: 'string.delimiter', next: '@pop' }],
+            ['.', 'string']
+        ],
+        stringendquote: [
+            ['\\\\.', 'string'],
+            ["'", { token: 'string.delimiter', next: '@pop' }],
+            ['.', 'string']
         ]
     }
 };
