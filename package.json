@@ -35,7 +35,8 @@
     "ci": "run-s build coverage",
     "prepublishOnly": "npm-run-all --parallel lint test build dist",
     "changelog": "generate-changelog",
-    "analyz": "webpack --profile --json > stats.json && webpack-bundle-analyzer ./stats.json"
+    "analyz": "webpack --profile --json > stats.json && webpack-bundle-analyzer ./stats.json",
+    "demo": "parcel serve --no-cache index.html"
   },
   "dependencies": {
     "@antv/adjust": "^0.2.1",
@@ -72,6 +73,7 @@
     "lint-staged": "^10.2.2",
     "lodash": "^4.17.15",
     "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.4",
     "prettier": "^2.0.5",
     "react-i18next": "^11.1.0",
     "rimraf": "^3.0.0",
