@@ -32,7 +32,7 @@ G2 4.0 在功能上全面兼容 3.x 的功能，在 API 接口上，我们进行
 
 - 🗑️ `chart.source()` 接口废弃，请使用 `chart.data()` 接口，同时列定义请通过 `chart.scale()`  接口进行定义。
 - 🗑️ `chart.coord()` 接口废弃，请使用 `chart.coordinate()`。
-- 🗑️ `chart.guide()` 接口废弃，请使用 `chart.annotation()`，同时不再支持 `chart.guide().html()`。
+- 🗑️ `chart.guide()` 接口废弃，请使用 `chart.annotation()`。
 - 🗑️ `chart.view()`  接口废弃，请使用 `chart.createView()`。
 - 🗑️ `chart.interact()`  接口废弃，请使用 `chart.interaction()`。
 - 🗑️ `chart.repaint()`  接口废弃，请使用 `chart.render(update: boolean)` 接口。
