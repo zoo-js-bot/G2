@@ -3,7 +3,7 @@ title: 主题配置项详解
 order: 7
 ---
 
-## 基础配置
+## 基础配置2
 
 - 主题色： defaultColor
 - 字体：fontFamily
