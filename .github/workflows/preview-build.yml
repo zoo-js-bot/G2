@@ -1,4 +1,4 @@
-name: Surge PR Preview - Build Stage
+name: Preview Build
 
 on:
   pull_request:
@@ -24,3 +24,15 @@ jobs:
         with:
           name: pr-build-dist
           path: public/
+          retention-days: 5
+
+      - name: save PR number
+        if: ${{ always() }}
+        run: echo ${{ github.event.number }} > ./pr-id.txt
+
+      - name: upload PR number
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: ./pr-id.txt
